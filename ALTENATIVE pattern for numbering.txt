@@ -1,0 +1,98 @@
+ALTENATIVE
+                            The following numbers has been recorded and named, for instance, the recording for 5 is 5.wav and that of 6 is 6.wav
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 20-90, 100, 1000, 1000000
+Note: “20-90.wav” is a special suffix for number between 20 to 90 (of which I shall tell you how to use it perfectly in the numbering system of my language). 
+
+
+•	11: 10.wav + KƐ.wav + 1.wav
+•	20: 20-90.wav + 2.wav
+•	40: 20-90.wav+4.wav
+•	60: 20-90.wav+6.wav
+•	21: 20-90.wav + 2.wav + KƐ.wav + 1.wav
+•	34: 20-90.wav+3.wav+ KƐ.wav+4.wav
+•	76: 20-90.wav+7.wav+ KƐ.wav+6.wav
+•	100: 100.wav+1.wav
+•	200: 100.wav+2.wav
+•	300: 100.wav+3.wav
+•	101: 100.wav + 1.wav+ KƐ.wav + 1.wav
+•	123: 100.wav +1.wav+ 20-90.wav + 2.wav + KƐ.wav + 3.wav
+•	257: 100.wav + 2.wav + 20-90.wav + 5.wav + KƐ.wav + 7.wav
+•	349: 100.wav + 3.wav + 20-90.wav + 4.wav + KƐ.wav + 9.wav
+•	1000: 1000.wav+1.wav
+•	2000: 1000.wav + 2.wav
+•	1003: 1000.wav+1.wav+ KƐ.wav+3.wav
+•	1002: 1000.wav + 1.wav + KƐ.wav + 2.wav
+•	2006: 1000.wav+2.wav+KƐ.wav+6.wav
+•	4065: 1000.wav+4.wav+20-90.wav+6.wav+KƐ.wav+5.wav
+•	5095: 1000.wav+5.wav+20-90.wav+9.wav+KƐ.wav+5.wav
+•	8600: 1000.wav+8.wav+100.wav+6.wav
+•	7500: 1000.wav+7.wav+100.wav+5.wav
+•	1010: 1000.wav+1.wav+KƐ.wav+10.wav
+•	2010: 1000.wav+2.wav+KƐ.wav+10.wav
+•	8010: 1000.wav+8.wav+KƐ.wav+10.wav
+•	1015:  1000.wav +1.wav+10.wav+KƐ+5.wav
+•	2015: 1000.wav+2.wav+10.wav+KƐ.wav+5.wav
+•	4020: 1000.wav+ 4.wav+KƐ.wav+ 20-90.wav+2
+•	8030: 1000.wav+ 8.wav+ KƐ.wav +20-90.wav+3.wav
+•	8780: 1000.wav+8.wav+100.wav+7.wav+KƐ.wav +20-90.wav+8.wav
+•	3465: 1000.wav + 3.wav + 100.wav + 4.wav + 20-90.wav + 6.wav + KƐ.wav + 5.wav
+•	5467: 1000.wav + 5.wav + 100.wav + 4.wav + 20-90.wav + 6.wav + KƐ.wav + 7.wav
+•	10000: 1000.wav + 10.wav
+•	20000: 1000.wav + 20-90.wav + 2.wav
+•	30000: 1000.wav + 20-90.wav + 3.wav
+•	20005: 1000.wav + 20-90.wav+2.wav+ KƐ.wav+5.wav
+•	40003: 1000.wav+ 20-90.wav +4.wav+KƐ.wav+ 3.wav
+•	70010: 1000.wav+20-90.wav+7.wav+KƐ.wav+10.wav
+•	80010: 1000.wav+20-90.wav+8.wav+KƐ.wav+10.wav
+•	90011: 1000.wav+20-90.wav+9.wav+KƐ.wav+10.wav+KƐ.wav+1.wav
+•	70017: 1000.wav+20-90.wav+7.wav+KƐ.wav+10.wav+KƐ.wav+7.wav
+•	30020: 1000.wav+20-90.wav+3.wav+KƐ.wav+20-90.wav+2.wav
+•	40030: 1000.wav+20-90.wav+4.wav+KƐ.wav+20-90.wav+3.wav
+•	50041: 1000.wav+20-90.wav+5.wav+KƐ.wav+20-90.wav+4.wav+KƐ.wav+1.wav
+•	80234: 1000.wav+20-90.wav+8.wav+100.wav+2.wav+20-90.wav+3.wav+KƐ.wav+4.wav
+•	20756: 1000.wav+20-90.wav+2.wav+100.wav+7.wav+20-90.wav+5.wav+KƐ.wav+6.wav
+•	98645: 1000.wav + 20-90.wav + 9.wav + KƐ.wav + 8.wav + 100.wav + 6.wav + 20-90.wav + 4.wav + KƐ.wav + 5.wav
+•	46835: 1000.wav + 20-90.wav + 4.wav + KƐ.wav + 6.wav + 100.wav + 8.wav + 20-90.wav + 3.wav + KƐ.wav + 5.wav
+•	14300: 1000.wav+ 10.wav+4.wav+100.wav+3.wav
+•	15600: 1000.wav+ 10.wav+5.wav+100.wav+6.wav
+•	75800: 1000.wav + 20-90.wav + 7.wav + KƐ.wav+ 5.wav + 100.wav + 8.wav 
+•	86700: 1000.wav + 20-90.wav + 8.wav + KƐ.wav+ 6.wav + 100.wav + 8.wav 
+•	15000: 1000.wav+10.wav+ KƐ.wav+5.wav
+•	16000: 1000.wav+10.wav+ KƐ.wav+6.wav
+•	200000: 1000.wav + 100.wav + 2.wav
+•	300000: 1000.wav + 100.wav + 3.wav
+•	400000: 1000.wav + 100.wav + 4.wav
+•	800005: 1000.wav + 100.wav + 8.wav+KƐ.wav+5.wav
+•	900009: 1000.wav + 100.wav + 9.wav+KƐ.wav+9.wav
+•	800010: 1000.wav + 100.wav + 8.wav+KƐ.wav+10.wav
+•	300011: 1000.wav + 100.wav + 3.wav+KƐ.wav+10.wav+KƐ.wav+1.wav
+•	600015: 1000.wav + 100.wav + 6.wav+KƐ.wav+10.wav+KƐ.wav+5.wav
+•	800020: 1000.wav + 100.wav + 8.wav+KƐ.wav+20-90.wav+2.wav
+•	900040: 1000.wav + 100.wav + 9.wav+KƐ.wav+20-90.wav+4.wav
+•	300031: 1000.wav + 100.wav + 3.wav+KƐ.wav+20-90.wav+3.wav +KƐ.wav+1.wav
+•	500058: 1000.wav + 100.wav + 5.wav+KƐ.wav+20-90.wav+5.wav +KƐ.wav+8.wav
+•	700800: 1000.wav+100.wav+7.wav+100.wav+8.wav
+•	400900: 1000.wav+100.wav+4.wav+100.wav+9.wav
+•	600501: 1000.wav+100.wav+6.wav+100.wav+5.wav+KƐ.wav+1.wav
+•	800604: 1000.wav+100.wav+8.wav+100.wav+6.wav+KƐ.wav+4.wav
+•	700820: 1000.wav+100.wav+7.wav+100.wav+8.wav+KƐ.wav+20-90.wav+2.wav
+•	900672: 1000.wav+100.wav+9.wav+100.wav+6.wav+20-90.wav+7.wav+KƐ.wav+2.wav
+•	200954: 1000.wav+100.wav+2.wav+100.wav+9.wav+20-90.wav+5.wav+KƐ.wav+4.wav
+•	801000: 1000.wav+100.wav+8.wav+KƐ.wav+1.wav
+•	705000: 1000.wav+100.wav+7.wav+KƐ.wav+5.wav
+•	
+•	894768: 1000.wav + 100.wav + 8.wav + 20-90.wav + 9.wav + KƐ.wav + 4.wav + 100.wav + 7.wav + 20-90.wav + 6.wav + KƐ.wav + 8.wav
+•	2000000: 1000000.wav + 2.wav
+•	3000000: 1000000.wav + 3.wav
+•	3468567: 1000000.wav + 3.wav + 1000.wav + 100.wav + 4.wav + 20-90.wav + 6.wav + KƐ.wav + 8.wav + 100.wav + 5.wav + 20-90.wav + 6.wav + KƐ.wav + 7.wav
+•	9684648: 1000000.wav + 9.wav + 1000.wav + 100.wav + 6.wav + 20-90.wav + 8.wav + KƐ.wav + 4.wav + 100.wav + 6.wav + 20-90.wav + 4.wav + KƐ.wav + 8.wav
+•	10000000: 1000000.wav+10.wav
+•	11000000: 1000000.wav+10.wav+KƐ.wav+1.wav
+•	12000000: 1000000.wav+10.wav+KƐ.wav+2.wav
+•	20000000: 1000000.wav+20-90.wav +2.wav
+•	30000000: 1000000.wav+20-90.wav +3.wav
+•	47000000: 1000000.wav+20-90.wav +4.wav+KƐ.wav+7.wav
+•	69000000: 1000000.wav+20-90.wav +6.wav+KƐ.wav+9.wav
+•	100000000: 1000000.wav+100.wav
+•	200000000: 1000000.wav+100.wav+2.wav
+•	1000000000: 1000000.wav+1000000.wav
