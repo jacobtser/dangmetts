@@ -2,13 +2,47 @@ import os
 import re
 import soundfile as sf
 import sounddevice as sd
+import numpy as np
+import librosa
 
-# Define the directory containing the audio files
-audio_dir = r"C:\Users\jacob\OneDrive\Desktop\Der Feige droht nur, wo er sicher ist\TTS"
+# Define the directory containing the male audio files
+male_audio_dir = r"C:\Users\jacob\OneDrive\Desktop\Der Feige droht nur, wo er sicher ist\TTS"
+
+# Ask the user to choose a voice
+voice_choice = input("Choose a voice (male/female): ").strip().lower()
+
+# Function to transform male voice to female voice
+def transform_to_female(audio_data, sample_rate):
+    # Shift the pitch up by 4 semitones (to make it sound more like a female voice)
+    audio_data_female = librosa.effects.pitch_shift(audio_data, sample_rate, n_steps=4)
+    return audio_data_female
+
+# Function to play audio files with adjustable speed
+def play_audio(files, speed=1.0):
+    for file in files:
+        filepath = os.path.join(male_audio_dir, file)
+        try:
+            if os.path.exists(filepath):
+                print(f"Playing audio file: {file}")
+                data, fs = sf.read(filepath)
+
+                # Transform to female voice if selected
+                if voice_choice == "female":
+                    data = transform_to_female(data, fs)
+
+                # Adjust the sample rate based on the speed
+                adjusted_fs = int(fs * speed)
+                # Play the audio with the correct sample rate
+                sd.play(data, samplerate=adjusted_fs)
+                sd.wait()
+            else:
+                print(f"Audio file not found: {file}")
+        except Exception as e:
+            print(f"Error playing {file}: {e}")
 
 # Mapping of phonemes to corresponding audio files
 valid_word_file_map = {
-        "a": "A.wav", "à": "A.wav",  # Same sound
+                    "a": "A.wav", "à": "A.wav",  # Same sound
         "á": "Á.wav", "ã": "Ã.wav",  # Different sounds
 
         # E vowel grouping: E, È are the same, but different from É and Ẽ
@@ -609,10 +643,9 @@ valid_word_file_map = {
         "nylũ": "NYLŨ.wav",
 }
 
-
 # Mapping of numbers to corresponding audio files
 number_to_wav = {
-    0: "0.wav", 
+    0: "0.wav",
     1: "1.wav",
     2: "2.wav",
     3: "3.wav",
@@ -637,25 +670,244 @@ number_to_wav = {
     "KƐ": "KƐ.wav"
 }
 
-# Function to play audio files with adjustable speed
-def play_audio(files, speed=1.0):
-    for file in files:
-        filepath = os.path.join(audio_dir, file)
-        try:
-            if os.path.exists(filepath):
-                print(f"Playing audio file: {file}")
-                data, fs = sf.read(filepath)
-                # Adjust the sample rate based on the speed
-                adjusted_fs = int(fs * speed)
-                sd.play(data, adjusted_fs)
-                sd.wait()
-            else:
-                print(f"Audio file not found: {file}")
-        except Exception as e:
-            print(f"Error playing {file}: {e}")
+# Master code dictionary for custom pronunciations
+master_code = {
+    # CORRECT
+        # CORRECT
+    101: ["100.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "1.wav"],
+    102: ["100.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "2.wav"],
+    103: ["100.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "3.wav"],
+    104: ["100.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "4.wav"],
+    105: ["100.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "5.wav"],
+    106: ["100.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "6.wav"],
+    107: ["100.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "7.wav"],
+    108: ["100.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "8.wav"],
+    109: ["100.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "9.wav"],
+    110: ["100.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "10.wav"],
+
+    1001: ["1000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "1.wav"],
+    1002: ["1000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "2.wav"],
+    1003: ["1000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "3.wav"],
+    1004: ["1000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "4.wav"],
+    1005: ["1000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "5.wav"],
+    1006: ["1000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "6.wav"],
+    1007: ["1000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "7.wav"],
+    1008: ["1000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "8.wav"],
+    1009: ["1000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "9.wav"],
+    1010: ["1000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "10.wav"],
+
+    # 10,001 to 10,009
+    10001: ["10000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "1.wav"],
+    10002: ["10000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "2.wav"],
+    10003: ["10000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "3.wav"],
+    10004: ["10000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "4.wav"],
+    10005: ["10000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "5.wav"],
+    10006: ["10000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "6.wav"],
+    10007: ["10000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "7.wav"],
+    10008: ["10000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "8.wav"],
+    10009: ["10000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "9.wav"],
+    10010: ["10000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "10.wav"],
+
+    1001: ["1000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "1.wav"],
+    1002: ["1000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "2.wav"],
+    1003: ["1000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "3.wav"],
+    1004: ["1000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "4.wav"],
+    1005: ["1000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "5.wav"],
+    1006: ["1000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "6.wav"],
+    1007: ["1000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "7.wav"],
+    1008: ["1000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "8.wav"],
+    1009: ["1000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "9.wav"],
+    1010: ["1000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "10.wav"],
+
+    # 10,001 to 10,009
+    10001: ["10000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "1.wav"],
+    10002: ["10000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "2.wav"],
+    10003: ["10000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "3.wav"],
+    10004: ["10000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "4.wav"],
+    10005: ["10000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "5.wav"],
+    10006: ["10000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "6.wav"],
+    10007: ["10000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "7.wav"],
+    10008: ["10000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "8.wav"],
+    10009: ["10000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "9.wav"],
+    10010: ["10000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "10.wav"],
+    
+        # 1,000,001 to 1,000,009
+    1000001: ["1000000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "1.wav"],
+    1000002: ["1000000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "2.wav"],
+    1000003: ["1000000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "3.wav"],
+    1000004: ["1000000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "4.wav"],
+    1000005: ["1000000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "5.wav"],
+    1000006: ["1000000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "6.wav"],
+    1000007: ["1000000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "7.wav"],
+    1000008: ["1000000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "8.wav"],
+    1000009: ["1000000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "9.wav"],
+    1000010: ["1000000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "10.wav"],
+
+    # 10,000,001 to 10,000,009
+    10000001: ["10000000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "1.wav"],
+    10000002: ["10000000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "2.wav"],
+    10000003: ["10000000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "3.wav"],
+    10000004: ["10000000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "4.wav"],
+    10000005: ["10000000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "5.wav"],
+    10000006: ["10000000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "6.wav"],
+    10000007: ["10000000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "7.wav"],
+    10000008: ["10000000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "8.wav"],
+    10000009: ["10000000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "9.wav"],
+    10000010: ["10000000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "10.wav"],
+
+    # 100,000,001 to 100,000,010
+    100000001: ["100000000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "1.wav"],
+    100000002: ["100000000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "2.wav"],
+    100000003: ["100000000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "3.wav"],
+    100000004: ["100000000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "4.wav"],
+    100000005: ["100000000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "5.wav"],
+    100000006: ["100000000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "6.wav"],
+    100000007: ["100000000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "7.wav"],
+    100000008: ["100000000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "8.wav"],
+    100000009: ["100000000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "9.wav"],
+    100000010: ["100000000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "10.wav"],
+
+    # 1,000,000,001 to 1,000,000,010
+    1000000001: ["1000000.wav", "MĨ.wav", "1000000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "1.wav"],
+    1000000002: ["1000000.wav", "MĨ.wav", "1000000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "2.wav"],
+    1000000003: ["1000000.wav", "MĨ.wav", "1000000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "3.wav"],
+    1000000004: ["1000000.wav", "MĨ.wav", "1000000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "4.wav"],
+    1000000005: ["1000000.wav", "MĨ.wav", "1000000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "5.wav"],
+    1000000006: ["1000000.wav", "MĨ.wav", "1000000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "6.wav"],
+    1000000007: ["1000000.wav", "MĨ.wav", "1000000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "7.wav"],
+    1000000008: ["1000000.wav", "MĨ.wav", "1000000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "8.wav"],
+    1000000009: ["1000000.wav", "MĨ.wav", "1000000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "9.wav"],
+    1000000010: ["1000000.wav", "MĨ.wav", "1000000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "10.wav"],
+    
+    # 10,001 to 10,010
+10001: ["1000.wav", "10.wav", "KƐ.wav", "NYÃ.wav", "1.wav"],
+10002: ["1000.wav", "10.wav", "KƐ.wav", "NYÃ.wav", "2.wav"],
+10003: ["1000.wav", "10.wav", "KƐ.wav", "NYÃ.wav", "3.wav"],
+10004: ["1000.wav", "10.wav", "KƐ.wav", "NYÃ.wav", "4.wav"],
+10005: ["1000.wav", "10.wav", "KƐ.wav", "NYÃ.wav", "5.wav"],
+10006: ["1000.wav", "10.wav", "KƐ.wav", "NYÃ.wav", "6.wav"],
+10007: ["1000.wav", "10.wav", "KƐ.wav", "NYÃ.wav", "7.wav"],
+10008: ["1000.wav", "10.wav", "KƐ.wav", "NYÃ.wav", "8.wav"],
+10009: ["1000.wav", "10.wav", "KƐ.wav", "NYÃ.wav", "9.wav"],
+10010: ["1000.wav", "10.wav", "KƐ.wav", "NYÃ.wav", "10.wav"],
+
+# 100,001 to 100,010
+100001: ["1000.wav", "100.wav", "KƐ.wav", "NYÃ.wav", "1.wav"],
+100002: ["1000.wav", "100.wav", "KƐ.wav", "NYÃ.wav", "2.wav"],
+100003: ["1000.wav", "100.wav", "KƐ.wav", "NYÃ.wav", "3.wav"],
+100004: ["1000.wav", "100.wav", "KƐ.wav", "NYÃ.wav", "4.wav"],
+100005: ["1000.wav", "100.wav", "KƐ.wav", "NYÃ.wav", "5.wav"],
+100006: ["1000.wav", "100.wav", "KƐ.wav", "NYÃ.wav", "6.wav"],
+100007: ["1000.wav", "100.wav", "KƐ.wav", "NYÃ.wav", "7.wav"],
+100008: ["1000.wav", "100.wav", "KƐ.wav", "NYÃ.wav", "8.wav"],
+100009: ["1000.wav", "100.wav", "KƐ.wav", "NYÃ.wav", "9.wav"],
+100010: ["1000.wav", "100.wav", "KƐ.wav", "NYÃ.wav", "10.wav"],
+
+# 10,000,001 to 10,000,010
+10000001: ["1000000.wav", "10.wav", "KƐ.wav", "NYÃ.wav", "1.wav"],
+10000002: ["1000000.wav", "10.wav", "KƐ.wav", "NYÃ.wav", "2.wav"],
+10000003: ["1000000.wav", "10.wav", "KƐ.wav", "NYÃ.wav", "3.wav"],
+10000004: ["1000000.wav", "10.wav", "KƐ.wav", "NYÃ.wav", "4.wav"],
+10000005: ["1000000.wav", "10.wav", "KƐ.wav", "NYÃ.wav", "5.wav"],
+10000006: ["1000000.wav", "10.wav", "KƐ.wav", "NYÃ.wav", "6.wav"],
+10000007: ["1000000.wav", "10.wav", "KƐ.wav", "NYÃ.wav", "7.wav"],
+10000008: ["1000000.wav", "10.wav", "KƐ.wav", "NYÃ.wav", "8.wav"],
+10000009: ["1000000.wav", "10.wav", "KƐ.wav", "NYÃ.wav", "9.wav"],
+10000010: ["1000000.wav", "10.wav", "KƐ.wav", "NYÃ.wav", "10.wav"],
+
+# 100,000,001 to 100,000,010
+100000001: ["1000000.wav", "100.wav", "KƐ.wav", "NYÃ.wav", "1.wav"],
+100000002: ["1000000.wav", "100.wav", "KƐ.wav", "NYÃ.wav", "2.wav"],
+100000003: ["1000000.wav", "100.wav", "KƐ.wav", "NYÃ.wav", "3.wav"],
+100000004: ["1000000.wav", "100.wav", "KƐ.wav", "NYÃ.wav", "4.wav"],
+100000005: ["1000000.wav", "100.wav", "KƐ.wav", "NYÃ.wav", "5.wav"],
+100000006: ["1000000.wav", "100.wav", "KƐ.wav", "NYÃ.wav", "6.wav"],
+100000007: ["1000000.wav", "100.wav", "KƐ.wav", "NYÃ.wav", "7.wav"],
+100000008: ["1000000.wav", "100.wav", "KƐ.wav", "NYÃ.wav", "8.wav"],
+100000009: ["1000000.wav", "100.wav", "KƐ.wav", "NYÃ.wav", "9.wav"],
+100000010: ["1000000.wav", "100.wav", "KƐ.wav", "NYÃ.wav", "10.wav"],
+
+# 10,000,000,001 to 10,000,000,010
+10000000001: ["1000000.wav", "MĨ.wav", "1000000.wav", "10.wav", "KƐ.wav", "NYÃ.wav", "1.wav"],
+10000000002: ["1000000.wav", "MĨ.wav", "1000000.wav", "10.wav", "KƐ.wav", "NYÃ.wav", "2.wav"],
+10000000003: ["1000000.wav", "MĨ.wav", "1000000.wav", "10.wav", "KƐ.wav", "NYÃ.wav", "3.wav"],
+10000000004: ["1000000.wav", "MĨ.wav", "1000000.wav", "10.wav", "KƐ.wav", "NYÃ.wav", "4.wav"],
+10000000005: ["1000000.wav", "MĨ.wav", "1000000.wav", "10.wav", "KƐ.wav", "NYÃ.wav", "5.wav"],
+10000000006: ["1000000.wav", "MĨ.wav", "1000000.wav", "10.wav", "KƐ.wav", "NYÃ.wav", "6.wav"],
+10000000007: ["1000000.wav", "MĨ.wav", "1000000.wav", "10.wav", "KƐ.wav", "NYÃ.wav", "7.wav"],
+10000000008: ["1000000.wav", "MĨ.wav", "1000000.wav", "10.wav", "KƐ.wav", "NYÃ.wav", "8.wav"],
+10000000009: ["1000000.wav", "MĨ.wav", "1000000.wav", "10.wav", "KƐ.wav", "NYÃ.wav", "9.wav"],
+10000000010: ["1000000.wav", "MĨ.wav", "1000000.wav", "10.wav", "KƐ.wav", "NYÃ.wav", "10.wav"],
+    
+    
+
+
+    # 100,000,000,000 (100 billion)
+    100000000001: ["1000000.wav", "MĨ.wav", "1000000.wav", "100.wav", "KƐ.wav", "NYÃ.wav", "1.wav"],
+    100000000002: ["1000000.wav", "MĨ.wav", "1000000.wav", "100.wav", "KƐ.wav", "NYÃ.wav", "2.wav"],
+    100000000003: ["1000000.wav", "MĨ.wav", "1000000.wav", "100.wav", "KƐ.wav", "NYÃ.wav", "3.wav"],
+    100000000004: ["1000000.wav", "MĨ.wav", "1000000.wav", "100.wav", "KƐ.wav", "NYÃ.wav", "4.wav"],
+    100000000005: ["1000000.wav", "MĨ.wav", "1000000.wav", "100.wav", "KƐ.wav", "NYÃ.wav", "5.wav"],
+    100000000006: ["1000000.wav", "MĨ.wav", "1000000.wav", "100.wav", "KƐ.wav", "NYÃ.wav", "6.wav"],
+    100000000007: ["1000000.wav", "MĨ.wav", "1000000.wav", "100.wav", "KƐ.wav", "NYÃ.wav", "7.wav"],
+    100000000008: ["1000000.wav", "MĨ.wav", "1000000.wav", "100.wav", "KƐ.wav", "NYÃ.wav", "8.wav"],
+    100000000009: ["1000000.wav", "MĨ.wav", "1000000.wav", "100.wav", "KƐ.wav", "NYÃ.wav", "9.wav"],
+    100000000010: ["1000000.wav", "MĨ.wav", "1000000.wav", "100.wav", "KƐ.wav", "NYÃ.wav", "10.wav"],
+
+    # 100,000,000,000,001 (1 trillion)
+    1000000000001: ["1000000.wav", "MĨ.wav", "1000000.wav", "MĨ.wav", "1000000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "1.wav"],
+    1000000000002: ["1000000.wav", "MĨ.wav", "1000000.wav", "MĨ.wav", "1000000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "2.wav"],
+    1000000000003: ["1000000.wav", "MĨ.wav", "1000000.wav", "MĨ.wav", "1000000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "3.wav"],
+    1000000000004: ["1000000.wav", "MĨ.wav", "1000000.wav", "MĨ.wav", "1000000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "4.wav"],
+    1000000000005: ["1000000.wav", "MĨ.wav", "1000000.wav", "MĨ.wav", "1000000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "5.wav"],
+    1000000000006: ["1000000.wav", "MĨ.wav", "1000000.wav", "MĨ.wav", "1000000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "6.wav"],
+    1000000000007: ["1000000.wav", "MĨ.wav", "1000000.wav", "MĨ.wav", "1000000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "7.wav"],
+    1000000000008: ["1000000.wav", "MĨ.wav", "1000000.wav", "MĨ.wav", "1000000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "8.wav"],
+    1000000000009: ["1000000.wav", "MĨ.wav", "1000000.wav", "MĨ.wav", "1000000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "9.wav"],
+    1000000000010: ["1000000.wav", "MĨ.wav", "1000000.wav", "MĨ.wav", "1000000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "10.wav"],
+
+    # 100,000,000,000,000,001 (10 trillion)
+    1000000000000001: ["1000000.wav", "MĨ.wav", "1000000.wav", "MĨ.wav", "1000000.wav", "10.wav", "KƐ.wav", "NYÃ.wav", "1.wav"],
+    1000000000000002: ["1000000.wav", "MĨ.wav", "1000000.wav", "MĨ.wav", "1000000.wav", "10.wav", "KƐ.wav", "NYÃ.wav", "2.wav"],
+    1000000000000003: ["1000000.wav", "MĨ.wav", "1000000.wav", "MĨ.wav", "1000000.wav", "10.wav", "KƐ.wav", "NYÃ.wav", "3.wav"],
+    1000000000000004: ["1000000.wav", "MĨ.wav", "1000000.wav", "MĨ.wav", "1000000.wav", "10.wav", "KƐ.wav", "NYÃ.wav", "4.wav"],
+    1000000000000005: ["1000000.wav", "MĨ.wav", "1000000.wav", "MĨ.wav", "1000000.wav", "10.wav", "KƐ.wav", "NYÃ.wav", "5.wav"],
+    1000000000000006: ["1000000.wav", "MĨ.wav", "1000000.wav", "MĨ.wav", "1000000.wav", "10.wav", "KƐ.wav", "NYÃ.wav", "6.wav"],
+    1000000000000007: ["1000000.wav", "MĨ.wav", "1000000.wav", "MĨ.wav", "1000000.wav", "10.wav", "KƐ.wav", "NYÃ.wav", "7.wav"],
+    1000000000000008: ["1000000.wav", "MĨ.wav", "1000000.wav", "MĨ.wav", "1000000.wav", "10.wav", "KƐ.wav", "NYÃ.wav", "8.wav"],
+    1000000000000009: ["1000000.wav", "MĨ.wav", "1000000.wav", "MĨ.wav", "1000000.wav", "10.wav", "KƐ.wav", "NYÃ.wav", "9.wav"],
+    1000000000000010: ["1000000.wav", "MĨ.wav", "1000000.wav", "MĨ.wav", "1000000.wav", "10.wav", "KƐ.wav", "NYÃ.wav", "10.wav"],
+
+    # 100,000,000,000,000,001 (100 trillion)
+    10000000000000001: ["1000000.wav", "MĨ.wav", "1000000.wav", "MĨ.wav", "1000000.wav", "100.wav", "KƐ.wav", "NYÃ.wav", "1.wav"],
+    10000000000000002: ["1000000.wav", "MĨ.wav", "1000000.wav", "MĨ.wav", "1000000.wav", "100.wav", "KƐ.wav", "NYÃ.wav", "2.wav"],
+    10000000000000003: ["1000000.wav", "MĨ.wav", "1000000.wav", "MĨ.wav", "1000000.wav", "100.wav", "KƐ.wav", "NYÃ.wav", "3.wav"],
+    10000000000000004: ["1000000.wav", "MĨ.wav", "1000000.wav", "MĨ.wav", "1000000.wav", "100.wav", "KƐ.wav", "NYÃ.wav", "4.wav"],
+    10000000000000005: ["1000000.wav", "MĨ.wav", "1000000.wav", "MĨ.wav", "1000000.wav", "100.wav", "KƐ.wav", "NYÃ.wav", "5.wav"],
+    10000000000000006: ["1000000.wav", "MĨ.wav", "1000000.wav", "MĨ.wav", "1000000.wav", "100.wav", "KƐ.wav", "NYÃ.wav", "6.wav"],
+    10000000000000007: ["1000000.wav", "MĨ.wav", "1000000.wav", "MĨ.wav", "1000000.wav", "100.wav", "KƐ.wav", "NYÃ.wav", "7.wav"],
+    10000000000000008: ["1000000.wav", "MĨ.wav", "1000000.wav", "MĨ.wav", "1000000.wav", "100.wav", "KƐ.wav", "NYÃ.wav", "8.wav"],
+    10000000000000009: ["1000000.wav", "MĨ.wav", "1000000.wav", "MĨ.wav", "1000000.wav", "100.wav", "KƐ.wav", "NYÃ.wav", "9.wav"],
+    10000000000000010: ["1000000.wav", "MĨ.wav", "1000000.wav", "MĨ.wav", "1000000.wav", "100.wav", "KƐ.wav", "NYÃ.wav", "10.wav"],
+
+    # 100,000,000,000,000,001 (Quadrillion)
+    10000000000000001: ["1000000.wav", "MĨ.wav", "1000000.wav", "MĨ.wav", "1000000.wav", "MĨ.wav", "1000000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "1.wav"],
+    10000000000000002: ["1000000.wav", "MĨ.wav", "1000000.wav", "MĨ.wav", "1000000.wav", "MĨ.wav", "1000000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "2.wav"],
+    10000000000000003: ["1000000.wav", "MĨ.wav", "1000000.wav", "MĨ.wav", "1000000.wav", "MĨ.wav", "1000000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "3.wav"],
+    10000000000000004: ["1000000.wav", "MĨ.wav", "1000000.wav", "MĨ.wav", "1000000.wav", "MĨ.wav", "1000000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "4.wav"],
+    10000000000000005: ["1000000.wav", "MĨ.wav", "1000000.wav", "MĨ.wav", "1000000.wav", "MĨ.wav", "1000000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "5.wav"],
+    10000000000000006: ["1000000.wav", "MĨ.wav", "1000000.wav", "MĨ.wav", "1000000.wav", "MĨ.wav", "1000000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "6.wav"],
+    10000000000000007: ["1000000.wav", "MĨ.wav", "1000000.wav", "MĨ.wav", "1000000.wav", "MĨ.wav", "1000000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "7.wav"],
+    10000000000000008: ["1000000.wav", "MĨ.wav", "1000000.wav", "MĨ.wav", "1000000.wav", "MĨ.wav", "1000000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "8.wav"],
+    10000000000000009: ["1000000.wav", "MĨ.wav", "1000000.wav", "MĨ.wav", "1000000.wav", "MĨ.wav", "1000000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "9.wav"],
+    10000000000000010: ["1000000.wav", "MĨ.wav", "1000000.wav", "MĨ.wav", "1000000.wav", "MĨ.wav", "1000000.wav", "1.wav", "KƐ.wav", "NYÃ.wav", "10.wav"],
+}
 
 # Function to generate the correct sequence of .wav files for a number
 def generate_wav_sequence(number):
+    if number in master_code:
+        return master_code[number]
+
     if number < 1:
         return []
 
@@ -681,11 +933,12 @@ def generate_wav_sequence(number):
         90: "20-90.wav",
         100: "100.wav",
         1000: "1000.wav",
-        1000000: "1000000.wav"
+        1000000: "1000000.wav",
     }
 
     # Define the KƐ.wav file
     ke_wav = "KƐ.wav"
+    mi_wav = "MĨ.wav"
 
     # Function to get the wav file for a single digit
     def get_wav(digit):
@@ -711,7 +964,7 @@ def generate_wav_sequence(number):
         if remainder == 0:
             return [get_wav(100), get_wav(hundreds)]
         else:
-            return [get_wav(100), get_wav(hundreds),] + generate_wav_sequence(remainder)
+            return [get_wav(100), get_wav(hundreds)] + generate_wav_sequence(remainder)
 
     # Function to handle numbers between 1000 and 999999
     def handle_thousands(num):
@@ -736,27 +989,27 @@ def generate_wav_sequence(number):
         billions = num // 1000000000
         remainder = num % 1000000000
         if remainder == 0:
-            return [get_wav(1000000), get_wav(1000000)] + generate_wav_sequence(billions)
+            return [get_wav(1000000), mi_wav, get_wav(1000000)] + generate_wav_sequence(billions)
         else:
-            return [get_wav(1000000), get_wav(1000000)] + generate_wav_sequence(billions) + generate_wav_sequence(remainder)
+            return [get_wav(1000000), mi_wav, get_wav(1000000)] + generate_wav_sequence(billions) + generate_wav_sequence(remainder)
 
     # Function to handle numbers in trillions (1,000,000,000,000 to 999,999,999,999,999)
     def handle_trillions(num):
         trillions = num // 1000000000000
         remainder = num % 1000000000000
         if remainder == 0:
-            return [get_wav(1000000), get_wav(1000000), get_wav(1000000)] + generate_wav_sequence(trillions)
+            return [get_wav(1000000), mi_wav, get_wav(1000000), mi_wav, get_wav(1000000)] + generate_wav_sequence(trillions)
         else:
-            return [get_wav(1000000), get_wav(1000000), get_wav(1000000)] + generate_wav_sequence(trillions) + generate_wav_sequence(remainder)
+            return [get_wav(1000000), mi_wav, get_wav(1000000), mi_wav, get_wav(1000000)] + generate_wav_sequence(trillions) + generate_wav_sequence(remainder)
 
     # Function to handle numbers in duadrillions (1,000,000,000,000,000 to 999,999,999,999,999,999)
     def handle_duadrillions(num):
         duadrillions = num // 1000000000000000
         remainder = num % 1000000000000000
         if remainder == 0:
-            return [get_wav(1000000), get_wav(1000000), get_wav(1000000), get_wav(1000000)] + generate_wav_sequence(duadrillions)
+            return [get_wav(1000000), mi_wav, get_wav(1000000), mi_wav, get_wav(1000000), mi_wav, get_wav(1000000)] + generate_wav_sequence(duadrillions)
         else:
-            return [get_wav(1000000), get_wav(1000000), get_wav(1000000), get_wav(1000000)] + generate_wav_sequence(duadrillions) + generate_wav_sequence(remainder)
+            return [get_wav(1000000), mi_wav, get_wav(1000000), mi_wav, get_wav(1000000), mi_wav, get_wav(1000000)] + generate_wav_sequence(duadrillions) + generate_wav_sequence(remainder)
 
     # Determine the range of the number and handle accordingly
     if number < 11:
@@ -820,16 +1073,19 @@ def process_mixed_input(text, speed=1.0):
             phonemes = split_into_phonemes(token, valid_word_file_map)
             play_phonemes(phonemes, valid_word_file_map, speed)
 
-# Welcome the user
-print("Mo hee ekohũ kɛ ba Dãngme klãmã nɛ̃ tsɔ̃ɔ̃ nɔ̃ bɔ nɛ̃ a tsɛ ɔ nɔ́ hã!")
+# Check if the user wants to skip the welcoming address
+skip_welcome = input("Moo ngmã R ké o bé sɛ gbĩ ɔ túe bue. Press 'R' to skip the welcoming address or any other key to continue: ").strip().lower()
+if skip_welcome != 'r':
+    # Welcome the user
+    print("Mo hee ekohũ kɛ ba Dãngme klãmã nɛ̃ tsɔ̃ɔ̃ nɔ̃ bɔ nɛ̃ a tsɛ ɔ nɔ́ hã!")
 
-# Play a welcoming audio file (add the file name here)
-welcome_audio_file = "mo hee.mp3"  # Replace with your actual welcome audio file name
-if os.path.exists(os.path.join(audio_dir, welcome_audio_file)):
-    print("I kpaa mo pɛɛ nɛ̃ ó bu sɛ gbĩ nɛ ɔ túe......")
-    play_audio([welcome_audio_file])
-else:
-    print("Kusiɛ, wa nã nyãgba ngɛ́ sɛ gbĩ ɔ̃ he.")
+    # Play a welcoming audio file (add the file name here)
+    welcome_audio_file = "mo hee.mp3"  # Replace with your actual welcome audio file name
+    if os.path.exists(os.path.join(male_audio_dir, welcome_audio_file)):
+        print("I kpaa mo pɛɛ nɛ̃ ó bu sɛ gbĩ nɛ ɔ túe......")
+        play_audio([welcome_audio_file])
+    else:
+        print("Kusiɛ, wa nã nyãgba ngɛ́ sɛ gbĩ ɔ̃ he.")
 
 # Ask the user for the playback speed
 try:

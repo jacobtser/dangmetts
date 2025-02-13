@@ -2,13 +2,14 @@ import os
 import re
 import soundfile as sf
 import sounddevice as sd
+from playsound import playsound  # Import the playsound function
 
 # Define the directory containing the audio files
 audio_dir = r"C:\Users\jacob\OneDrive\Desktop\Der Feige droht nur, wo er sicher ist\TTS"
 
 # Mapping of phonemes to corresponding audio files
 valid_word_file_map = {
-        "a": "A.wav", "à": "A.wav",  # Same sound
+             "a": "A.wav", "à": "A.wav",  # Same sound
         "á": "Á.wav", "ã": "Ã.wav",  # Different sounds
 
         # E vowel grouping: E, È are the same, but different from É and Ẽ
@@ -609,10 +610,9 @@ valid_word_file_map = {
         "nylũ": "NYLŨ.wav",
 }
 
-
 # Mapping of numbers to corresponding audio files
 number_to_wav = {
-    0: "0.wav", 
+    0: "0.wav",
     1: "1.wav",
     2: "2.wav",
     3: "3.wav",
@@ -634,8 +634,52 @@ number_to_wav = {
     100: "100.wav",
     1000: "1000.wav",
     1000000: "1000000.wav",
-    "KƐ": "KƐ.wav"
+    "KƐ": "KƐ.wav",
+    "MĨ": "MĨ.wav",
+    "NYÃ": "NYÃ.wav"
 }
+
+def extract_digits(num):
+    """
+    Extracts the hundreds, tens, and units digits from a number.
+    """
+    hundreds = (num // 100) % 10
+    remainder = num % 100
+    return hundreds, remainder
+
+def generate_pattern(num):
+    """
+    Generates the pattern for a given number.
+    """
+    hundreds, remainder = extract_digits(num)
+    pattern = ["100.wav", f"{hundreds}.wav", "KƐ.wav", "NYÃ.wav", f"{remainder}.wav"]
+    return pattern
+
+def play_pattern(pattern):
+    """
+    Plays the corresponding .wav files for the pattern.
+    """
+    for wav_file in pattern:
+        print(f"Playing: {wav_file}")
+        playsound(wav_file)  # Play the .wav file
+
+def generate_and_play_succession(start, end):
+    """
+    Generates and plays the succession of patterns for a range of numbers.
+    """
+    for num in range(start, end + 1):
+        if num < 101:
+            continue  # Skip numbers less than 101
+        pattern = generate_pattern(num)
+        print(f"{num}: {pattern}")
+        play_pattern(pattern)
+
+# Define the range
+start = 101
+end = 910  # Go up to 910
+
+# Generate and play the succession
+generate_and_play_succession(start, end)
 
 # Function to play audio files with adjustable speed
 def play_audio(files, speed=1.0):
@@ -647,7 +691,7 @@ def play_audio(files, speed=1.0):
                 data, fs = sf.read(filepath)
                 # Adjust the sample rate based on the speed
                 adjusted_fs = int(fs * speed)
-                sd.play(data, adjusted_fs)
+                sd.play(data, samplerate=adjusted_fs)
                 sd.wait()
             else:
                 print(f"Audio file not found: {file}")
@@ -656,129 +700,10 @@ def play_audio(files, speed=1.0):
 
 # Function to generate the correct sequence of .wav files for a number
 def generate_wav_sequence(number):
-    if number < 1:
-        return []
-
-    # Define the base wav files
-    base_wavs = {
-        1: "1.wav",
-        2: "2.wav",
-        3: "3.wav",
-        4: "4.wav",
-        5: "5.wav",
-        6: "6.wav",
-        7: "7.wav",
-        8: "8.wav",
-        9: "9.wav",
-        10: "10.wav",
-        20: "20-90.wav",
-        30: "20-90.wav",
-        40: "20-90.wav",
-        50: "20-90.wav",
-        60: "20-90.wav",
-        70: "20-90.wav",
-        80: "20-90.wav",
-        90: "20-90.wav",
-        100: "100.wav",
-        1000: "1000.wav",
-        1000000: "1000000.wav"
-    }
-
-    # Define the KƐ.wav file
-    ke_wav = "KƐ.wav"
-
-    # Function to get the wav file for a single digit
-    def get_wav(digit):
-        return base_wavs.get(digit, "")
-
-    # Function to handle numbers between 11 and 19
-    def handle_teens(num):
-        return [get_wav(10), ke_wav, get_wav(num % 10)]
-
-    # Function to handle numbers between 20 and 99
-    def handle_tens(num):
-        tens = (num // 10) * 10
-        units = num % 10
-        if units == 0:
-            return [get_wav(tens), get_wav(tens // 10)]
-        else:
-            return [get_wav(tens), get_wav(tens // 10), ke_wav, get_wav(units)]
-
-    # Function to handle numbers between 100 and 999
-    def handle_hundreds(num):
-        hundreds = num // 100
-        remainder = num % 100
-        if remainder == 0:
-            return [get_wav(100), get_wav(hundreds)]
-        else:
-            return [get_wav(100), get_wav(hundreds),] + generate_wav_sequence(remainder)
-
-    # Function to handle numbers between 1000 and 999999
-    def handle_thousands(num):
-        thousands = num // 1000
-        remainder = num % 1000
-        if remainder == 0:
-            return [get_wav(1000)] + generate_wav_sequence(thousands)
-        else:
-            return [get_wav(1000)] + generate_wav_sequence(thousands) + generate_wav_sequence(remainder)
-
-    # Function to handle numbers between 1000000 and 999999999
-    def handle_millions(num):
-        millions = num // 1000000
-        remainder = num % 1000000
-        if remainder == 0:
-            return [get_wav(1000000)] + generate_wav_sequence(millions)
-        else:
-            return [get_wav(1000000)] + generate_wav_sequence(millions) + generate_wav_sequence(remainder)
-
-    # Function to handle numbers in billions (1,000,000,000 to 999,999,999,999)
-    def handle_billions(num):
-        billions = num // 1000000000
-        remainder = num % 1000000000
-        if remainder == 0:
-            return [get_wav(1000000), get_wav(1000000)] + generate_wav_sequence(billions)
-        else:
-            return [get_wav(1000000), get_wav(1000000)] + generate_wav_sequence(billions) + generate_wav_sequence(remainder)
-
-    # Function to handle numbers in trillions (1,000,000,000,000 to 999,999,999,999,999)
-    def handle_trillions(num):
-        trillions = num // 1000000000000
-        remainder = num % 1000000000000
-        if remainder == 0:
-            return [get_wav(1000000), get_wav(1000000), get_wav(1000000)] + generate_wav_sequence(trillions)
-        else:
-            return [get_wav(1000000), get_wav(1000000), get_wav(1000000)] + generate_wav_sequence(trillions) + generate_wav_sequence(remainder)
-
-    # Function to handle numbers in duadrillions (1,000,000,000,000,000 to 999,999,999,999,999,999)
-    def handle_duadrillions(num):
-        duadrillions = num // 1000000000000000
-        remainder = num % 1000000000000000
-        if remainder == 0:
-            return [get_wav(1000000), get_wav(1000000), get_wav(1000000), get_wav(1000000)] + generate_wav_sequence(duadrillions)
-        else:
-            return [get_wav(1000000), get_wav(1000000), get_wav(1000000), get_wav(1000000)] + generate_wav_sequence(duadrillions) + generate_wav_sequence(remainder)
-
-    # Determine the range of the number and handle accordingly
-    if number < 11:
-        return [get_wav(number)]
-    elif 11 <= number < 20:
-        return handle_teens(number)
-    elif 20 <= number < 100:
-        return handle_tens(number)
-    elif 100 <= number < 1000:
-        return handle_hundreds(number)
-    elif 1000 <= number < 1000000:
-        return handle_thousands(number)
-    elif 1000000 <= number < 1000000000:
-        return handle_millions(number)
-    elif 1000000000 <= number < 1000000000000:
-        return handle_billions(number)
-    elif 1000000000000 <= number < 1000000000000000:
-        return handle_trillions(number)
-    elif 1000000000000000 <= number < 1000000000000000000:
-        return handle_duadrillions(number)
+    if number in number_to_wav:
+        return [number_to_wav[number]]
     else:
-        return ["Wa tui he blɔ nyã lolo."]
+        return ["Wa tui he blɔ nyã lolo."]  # Fallback for unsupported numbers
 
 # Function to split input text into phonemes
 def split_into_phonemes(text, phoneme_map):
@@ -820,16 +745,19 @@ def process_mixed_input(text, speed=1.0):
             phonemes = split_into_phonemes(token, valid_word_file_map)
             play_phonemes(phonemes, valid_word_file_map, speed)
 
-# Welcome the user
-print("Mo hee ekohũ kɛ ba Dãngme klãmã nɛ̃ tsɔ̃ɔ̃ nɔ̃ bɔ nɛ̃ a tsɛ ɔ nɔ́ hã!")
+# Check if the user wants to skip the welcoming address
+skip_welcome = input("Moo ngmã R ké o bé sɛ gbĩ ɔ túe bue. Press 'R' to skip the welcoming address or any other key to continue: ").strip().lower()
+if skip_welcome != 'r':
+    # Welcome the user
+    print("Mo hee ekohũ kɛ ba Dãngme klãmã nɛ̃ tsɔ̃ɔ̃ nɔ̃ bɔ nɛ̃ a tsɛ ɔ nɔ́ hã!")
 
-# Play a welcoming audio file (add the file name here)
-welcome_audio_file = "mo hee.mp3"  # Replace with your actual welcome audio file name
-if os.path.exists(os.path.join(audio_dir, welcome_audio_file)):
-    print("I kpaa mo pɛɛ nɛ̃ ó bu sɛ gbĩ nɛ ɔ túe......")
-    play_audio([welcome_audio_file])
-else:
-    print("Kusiɛ, wa nã nyãgba ngɛ́ sɛ gbĩ ɔ̃ he.")
+    # Play a welcoming audio file (add the file name here)
+    welcome_audio_file = "mo hee.mp3"  # Replace with your actual welcome audio file name
+    if os.path.exists(os.path.join(audio_dir, welcome_audio_file)):
+        print("I kpaa mo pɛɛ nɛ̃ ó bu sɛ gbĩ nɛ ɔ túe......")
+        play_audio([welcome_audio_file])
+    else:
+        print("Kusiɛ, wa nã nyãgba ngɛ́ sɛ gbĩ ɔ̃ he.")
 
 # Ask the user for the playback speed
 try:

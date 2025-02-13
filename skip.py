@@ -8,7 +8,7 @@ audio_dir = r"C:\Users\jacob\OneDrive\Desktop\Der Feige droht nur, wo er sicher 
 
 # Mapping of phonemes to corresponding audio files
 valid_word_file_map = {
-        "a": "A.wav", "à": "A.wav",  # Same sound
+            "a": "A.wav", "à": "A.wav",  # Same sound
         "á": "Á.wav", "ã": "Ã.wav",  # Different sounds
 
         # E vowel grouping: E, È are the same, but different from É and Ẽ
@@ -609,7 +609,6 @@ valid_word_file_map = {
         "nylũ": "NYLŨ.wav",
 }
 
-
 # Mapping of numbers to corresponding audio files
 number_to_wav = {
     0: "0.wav", 
@@ -681,11 +680,13 @@ def generate_wav_sequence(number):
         90: "20-90.wav",
         100: "100.wav",
         1000: "1000.wav",
-        1000000: "1000000.wav"
+        1000000: "1000000.wav",
+        1001: "1000.wav" +"KƐ.wav "+ "1.wav"
     }
 
     # Define the KƐ.wav file
     ke_wav = "KƐ.wav"
+    mi_wav = "MĨ.wav"
 
     # Function to get the wav file for a single digit
     def get_wav(digit):
@@ -736,27 +737,27 @@ def generate_wav_sequence(number):
         billions = num // 1000000000
         remainder = num % 1000000000
         if remainder == 0:
-            return [get_wav(1000000), get_wav(1000000)] + generate_wav_sequence(billions)
+            return [get_wav(1000000), mi_wav, get_wav(1000000)] + generate_wav_sequence(billions)
         else:
-            return [get_wav(1000000), get_wav(1000000)] + generate_wav_sequence(billions) + generate_wav_sequence(remainder)
+            return [get_wav(1000000), mi_wav, get_wav(1000000)] + generate_wav_sequence(billions) + generate_wav_sequence(remainder)
 
     # Function to handle numbers in trillions (1,000,000,000,000 to 999,999,999,999,999)
     def handle_trillions(num):
         trillions = num // 1000000000000
         remainder = num % 1000000000000
         if remainder == 0:
-            return [get_wav(1000000), get_wav(1000000), get_wav(1000000)] + generate_wav_sequence(trillions)
+            return [get_wav(1000000), mi_wav, get_wav(1000000), mi_wav, get_wav(1000000)] + generate_wav_sequence(trillions)
         else:
-            return [get_wav(1000000), get_wav(1000000), get_wav(1000000)] + generate_wav_sequence(trillions) + generate_wav_sequence(remainder)
+            return [get_wav(1000000), mi_wav, get_wav(1000000), mi_wav, get_wav(1000000)] + generate_wav_sequence(trillions) + generate_wav_sequence(remainder)
 
     # Function to handle numbers in duadrillions (1,000,000,000,000,000 to 999,999,999,999,999,999)
     def handle_duadrillions(num):
         duadrillions = num // 1000000000000000
         remainder = num % 1000000000000000
         if remainder == 0:
-            return [get_wav(1000000), get_wav(1000000), get_wav(1000000), get_wav(1000000)] + generate_wav_sequence(duadrillions)
+            return [get_wav(1000000), mi_wav, get_wav(1000000), mi_wav, get_wav(1000000), mi_wav, get_wav(1000000)] + generate_wav_sequence(duadrillions)
         else:
-            return [get_wav(1000000), get_wav(1000000), get_wav(1000000), get_wav(1000000)] + generate_wav_sequence(duadrillions) + generate_wav_sequence(remainder)
+            return [get_wav(1000000), mi_wav, get_wav(1000000), mi_wav, get_wav(1000000), mi_wav, get_wav(1000000)] + generate_wav_sequence(duadrillions) + generate_wav_sequence(remainder)
 
     # Determine the range of the number and handle accordingly
     if number < 11:
@@ -820,16 +821,19 @@ def process_mixed_input(text, speed=1.0):
             phonemes = split_into_phonemes(token, valid_word_file_map)
             play_phonemes(phonemes, valid_word_file_map, speed)
 
-# Welcome the user
-print("Mo hee ekohũ kɛ ba Dãngme klãmã nɛ̃ tsɔ̃ɔ̃ nɔ̃ bɔ nɛ̃ a tsɛ ɔ nɔ́ hã!")
+# Check if the user wants to skip the welcoming address
+skip_welcome = input("Press 'R' to skip the welcoming address or any other key to continue: ").strip().lower()
+if skip_welcome != 'r':
+    # Welcome the user
+    print("Mo hee ekohũ kɛ ba Dãngme klãmã nɛ̃ tsɔ̃ɔ̃ nɔ̃ bɔ nɛ̃ a tsɛ ɔ nɔ́ hã!")
 
-# Play a welcoming audio file (add the file name here)
-welcome_audio_file = "mo hee.mp3"  # Replace with your actual welcome audio file name
-if os.path.exists(os.path.join(audio_dir, welcome_audio_file)):
-    print("I kpaa mo pɛɛ nɛ̃ ó bu sɛ gbĩ nɛ ɔ túe......")
-    play_audio([welcome_audio_file])
-else:
-    print("Kusiɛ, wa nã nyãgba ngɛ́ sɛ gbĩ ɔ̃ he.")
+    # Play a welcoming audio file (add the file name here)
+    welcome_audio_file = "mo hee.mp3"  # Replace with your actual welcome audio file name
+    if os.path.exists(os.path.join(audio_dir, welcome_audio_file)):
+        print("I kpaa mo pɛɛ nɛ̃ ó bu sɛ gbĩ nɛ ɔ túe......")
+        play_audio([welcome_audio_file])
+    else:
+        print("Kusiɛ, wa nã nyãgba ngɛ́ sɛ gbĩ ɔ̃ he.")
 
 # Ask the user for the playback speed
 try:
