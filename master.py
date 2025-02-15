@@ -4,11 +4,11 @@ import soundfile as sf
 import sounddevice as sd
 
 # Define the directory containing the audio files
-audio_dir = r"C:\Users\jacob\OneDrive\Desktop\Der Feige droht nur, wo er sicher ist\TTS"
+audio_dir = audio_dir = "C:\Users\jacob\OneDrive\Desktop\Der Feige droht nur, wo er sicher ist\TTS_API"
 
 # Mapping of phonemes to corresponding audio files
 valid_word_file_map = {
-                "a": "A.wav", "à": "A.wav",  # Same sound
+        "a": "A.wav", "à": "A.wav",  # Same sound
         "á": "Á.wav", "ã": "Ã.wav",  # Different sounds
 
         # E vowel grouping: E, È are the same, but different from É and Ẽ
@@ -1330,79 +1330,7 @@ master_code = {
 
         # 1,000,000,000,001 to 1,000,000,000,010
         4000000000001: ["1000000.wav", "MĨ.wav", "1000000.wav", "MĨ.wav", "1000000.wav", "4.wav", "KƐ.wav", "NYÃ.wav", "1.wav"],
-        4000000000002: ["1000000.wav", "MĨ.wav", "1000000.wav", "MĨ.wav", "1000000.wav", "4.wav", "KƐ.wav", "NYÃ.wav",],
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+        4000000000002: ["1000000.wav", "MĨ.wav", "1000000.wav", "MĨ.wav", "1000000.wav", "4.wav", "KƐ.wav", "NYÃ.wav", "2.wav"],
     
     
     # tens pattern  # tens pattern    # tens pattern    # tens pattern    # tens pattern    
@@ -1450,9 +1378,6 @@ master_code = {
     1000280: ["1000000.wav", "1.wav", "KƐ.wav", "280.wav"],
     1000290: ["1000000.wav", "1.wav", "KƐ.wav", "290.wav"],
     1000300: ["1000000.wav", "1.wav", "KƐ.wav", "300.wav"],
-
-
-
 }
     
 
@@ -1603,7 +1528,7 @@ def generate_wav_sequence(number):
     elif 1000000000000000 <= number < 1000000000000000000:
         return handle_duadrillions(number)
     else:
-        return ["Wa tui he blɔ nyã lolo."]
+        return ["Wa tui he blɔ nyã lolo. That is not yet in the system"]
 
 # Function to split input text into phonemes
 def split_into_phonemes(text, phoneme_map):
@@ -1630,14 +1555,14 @@ def play_phonemes(phonemes, phoneme_map, speed=1.0):
         if audio_file:
             play_audio([audio_file], speed)
         else:
-            print(f"Wa tui : {phoneme} he blɔ nyã lolo aloo pí Dãngme")
+            print(f"Wa tui : {phoneme} he blɔ nyã lolo aloo pí Dãngme ")
 
 # Function to process mixed input (words and numbers)
 def process_mixed_input(text, speed=1.0):
     tokens = re.findall(r'\d+|\D+', text)  # Split into numbers and non-numbers
     for token in tokens:
         if token.isdigit():  # If the token is a number
-            print(f"I kpaa mo pɛɛ nɛ̃ ó bu túe be mĩ nɛ̃ I yaa tsɛ: {token}")
+            print(f"I kpaa mo pɛɛ nɛ̃ ó bu túe be mĩ nɛ̃ I yaa tsɛ. Please, listen while I pronounce: {token}")
             audio_files = generate_wav_sequence(int(token))
             play_audio(audio_files, speed)
         else:  # If the token is a word
@@ -1646,30 +1571,30 @@ def process_mixed_input(text, speed=1.0):
             play_phonemes(phonemes, valid_word_file_map, speed)
 
 # Check if the user wants to skip the welcoming address
-skip_welcome = input("Moo ngmã R ké o bé sɛ gbĩ ɔ túe bue. Press 'R' to skip the welcoming address or any other key to continue: ").strip().lower()
+skip_welcome = input("Moo ngmã R ké o bé sɛ gbĩ ɔ túe bue aloo moo ngmã e kpã ké o mãã bu tue . Press 'R' to skip the welcoming address or any other key to listen: ").strip().lower()
 if skip_welcome != 'r':
     # Welcome the user
-    print("Mo hee ekohũ kɛ ba Dãngme klãmã nɛ̃ tsɔ̃ɔ̃ nɔ̃ bɔ nɛ̃ a tsɛ ɔ nɔ́ hã!")
+    print("Mo hee ekohũ kɛ ba Dãngme klãmã nɛ̃ tsɔ̃ɔ̃ nɔ̃ bɔ nɛ̃ a tsɛ ɔ nɔ́ hã! Welcome to the Dãngme Text-To_Speech Software! ")
 
     # Play a welcoming audio file (add the file name here)
     welcome_audio_file = "mo hee.mp3"  # Replace with your actual welcome audio file name
     if os.path.exists(os.path.join(audio_dir, welcome_audio_file)):
-        print("I kpaa mo pɛɛ nɛ̃ ó bu sɛ gbĩ nɛ ɔ túe......")
+        print("I kpaa mo pɛɛ nɛ̃ ó bu sɛ gbĩ nɛ ɔ túe...... Please, listen to the message............")
         play_audio([welcome_audio_file])
     else:
-        print("Kusiɛ, wa nã nyãgba ngɛ́ sɛ gbĩ ɔ̃ he.")
+        print("Kusiɛ, wa nã nyãgba ngɛ́ sɛ gbĩ ɔ̃ he. There is a problem with the welcoming message")
 
 # Ask the user for the playback speed
 try:
-    speed = float(input("I kpaa mo pɛɛ nɛ̃ o ngmã bɔnɛ̃ mã tsɛ́ aloo kané nɔ̃ hã mo hã( ké o ngmã 1.0 ɔ í mã tsɛ́ aloo kané nɔ̃ ɔ̃ blɛuu, ké o ngmã 1.5 ɔ í mã tsɛ́ aloo kané nɔ̃ ɔ̃ kɛ oyá bɔɔ, sé ké o ngmã 2.0 ɔ í mã tsɛ́ aloo kané nɔ̃ ɔ̃ oyá. Ké e sɔ nɛ̃ sũɔ̃ kle tsɔ̃ ɔ̃, o bé nũɛ̃ nɔ̃ nɛ̃ i mã dé ɔ): "))
+    speed = float(input("I kpaa mo pɛɛ nɛ̃ o ngmã bɔnɛ̃ mã tsɛ́ aloo kané nɔ̃ hã mo hã( ké o ngmã 1.0 ɔ í mã tsɛ́ aloo kané nɔ̃ ɔ̃ blɛuu, ké o ngmã 1.5 ɔ í mã tsɛ́ aloo kané nɔ̃ ɔ̃ kɛ oyá bɔɔ, sé ké o ngmã 2.0 ɔ í mã tsɛ́ aloo kané nɔ̃ ɔ̃ oyá. Ké e sɔ nɛ̃ sũɔ̃ kle tsɔ̃ ɔ̃, o bé nũɛ̃ nɔ̃ nɛ̃ i mã dé ɔ). Write the speed at which you want to hear the pronunciation. 1.0 for normal, 1.5 for moderate and 2.0 for high speed ( you may not hear words for speed beyond 3): "))
 except ValueError:
     print("Bɔ nɛ̃ o suɔ̃ nɛ̃ mã tsɛ́ aloo kané nɔ̃ nɛ̃ o ngmã ã bé hĩɛ̃ hã mĩ. Lɛɛ í mã tsɛ́ hã mo blɛuu mɔ́")
     speed = 1.0
 
 # Main loop for user input
 while True:
-    user_input = input("I kpaa mo pɛɛ nɛ̃ ó ngma nɔ̃ nɛ́ o suɔ̃ nɛ́ mã tsɛ hã mo ɔ (aloo moo ngmã 'q' ké o gbe nyãã): ").strip().lower()
+    user_input = input("I kpaa mo pɛɛ nɛ̃ ó ngma nɔ̃ nɛ́ o suɔ̃ nɛ́ mã tsɛ hã mo ɔ (aloo moo ngmã 'q' ké o gbe nyãã). Write what the pronunciation you want to hear (in Dãngme) : ").strip().lower()
     if user_input == 'q':
-        print("Ké Mawu sũɔ̃, wá mãã kpe!")
+        print("Ké Mawu sũɔ̃, wá mãã kpe! We shall meet, if God permits!")
         break
     process_mixed_input(user_input, speed)
