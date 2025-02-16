@@ -8,7 +8,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return "Welcome to the TTS API!"
+    return "Mo hee ekohũ kɛ ba Dãngme klãmã nɛ̃ tsɔ̃ɔ̃ nɔ̃ bɔ nɛ̃ a tsɛ ɔ nɔ́ hã! Welcome to the Dãngme Text-To_Speech Software!"
 
 if __name__ == '__main__':
     app.run(debug=True)
