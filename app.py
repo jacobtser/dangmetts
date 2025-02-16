@@ -6,8 +6,15 @@ import sounddevice as sd
 
 app = Flask(__name__)
 
+@app.route('/')
+def home():
+    return "Welcome to the TTS API!"
+
+if __name__ == '__main__':
+    app.run(debug=True)
+
 # Define the directory containing the audio files
-audio_dir = r"C:\Users\jacob\OneDrive\Desktop\Der Feige droht nur, wo er sicher ist\AUDIO"
+audio_dir = r"C:\Users\jacob\OneDrive\Desktop\Der Feige droht nur, wo er sicher ist\TTS_API"
 
 valid_word_file_map = {
         "a": "A.wav", "à": "A.wav",  # Same sound
