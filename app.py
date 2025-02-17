@@ -3,6 +3,7 @@ import os
 import re
 import soundfile as sf
 import sounddevice as sd
+import numpy as np
 
 app = Flask(__name__)
 
@@ -10,12 +11,8 @@ app = Flask(__name__)
 def home():
     return "Mo hee ekohũ kɛ ba Dãngme klãmã nɛ̃ tsɔ̃ɔ̃ nɔ̃ bɔ nɛ̃ a tsɛ ɔ nɔ́ hã! Welcome to the Dãngme Text-To_Speech Software!"
 
-if __name__ == '__main__':
-    app.run(debug=True)
-
 # Define the directory containing the audio files
 audio_dir = r"C:\Users\jacob\OneDrive\Desktop\Der Feige droht nur, wo er sicher ist\TTS_API"
-
 valid_word_file_map = {
         "a": "A.wav", "à": "A.wav",  # Same sound
         "á": "Á.wav", "ã": "Ã.wav",  # Different sounds
@@ -1462,4 +1459,4 @@ def tts():
     return jsonify({"message": "Audio played successfully"})
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False)
