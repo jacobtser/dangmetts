@@ -1,4 +1,2 @@
-.vercel
-
-# Local Netlify folder
-.netlify
+# Virtual environment
+venv/
