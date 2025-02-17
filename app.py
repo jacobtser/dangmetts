@@ -12,7 +12,7 @@ def home():
     return "Mo hee ekohũ kɛ ba Dãngme klãmã nɛ̃ tsɔ̃ɔ̃ nɔ̃ bɔ nɛ̃ a tsɛ ɔ nɔ́ hã! Welcome to the Dãngme Text-To_Speech Software!"
 
 # Define the directory containing the audio files
-audio_dir = r"C:\Users\jacob\OneDrive\Desktop\Der Feige droht nur, wo er sicher ist\TTS_API"
+audio_dir = os.path.join(os.path.dirname(__file__), "audio")
 valid_word_file_map = {
         "a": "A.wav", "à": "A.wav",  # Same sound
         "á": "Á.wav", "ã": "Ã.wav",  # Different sounds
