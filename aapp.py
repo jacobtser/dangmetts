@@ -7,9 +7,12 @@ import numpy as np
 
 app = Flask(__name__)
 
+@app.route('/')
+def home():
+    return "Mo hee ekohũ kɛ ba Dãngme klãmã nɛ̃ tsɔ̃ɔ̃ nɔ̃ bɔ nɛ̃ a tsɛ ɔ nɔ́ hã! Welcome to the Dãngme Text-To_Speech Software!"
+
 # Define the directory containing the audio files
 audio_dir = os.path.join(os.path.dirname(__file__), "audio")
-
 valid_word_file_map = {
         "a": "A.wav", "à": "A.wav",  # Same sound
         "á": "Á.wav", "ã": "Ã.wav",  # Different sounds
@@ -1335,7 +1338,55 @@ master_code = {
         4000000000001: ["1000000.wav", "MĨ.wav", "1000000.wav", "MĨ.wav", "1000000.wav", "4.wav", "KƐ.wav", "NYÃ.wav", "1.wav"],
         4000000000002: ["1000000.wav", "MĨ.wav", "1000000.wav", "MĨ.wav", "1000000.wav", "4.wav", "KƐ.wav", "NYÃ.wav", "2.wav"],
     
+    
+    # tens pattern  # tens pattern    # tens pattern    # tens pattern    # tens pattern    
+    
+    1000010: ["1000000.wav", "1.wav", "KƐ.wav", "10.wav"],
+    1000020: ["1000000.wav", "1.wav", "KƐ.wav", "20.wav"],
+    1000030: ["1000000.wav", "1.wav", "KƐ.wav", "30.wav"],
+    1000040: ["1000000.wav", "1.wav", "KƐ.wav", "40.wav"],
+    1000050: ["1000000.wav", "1.wav", "KƐ.wav", "50.wav"],
+    1000060: ["1000000.wav", "1.wav", "KƐ.wav", "60.wav"],
+    1000070: ["1000000.wav", "1.wav", "KƐ.wav", "70.wav"],
+    1000080: ["1000000.wav", "1.wav", "KƐ.wav", "80.wav"],
+    1000090: ["1000000.wav", "1.wav", "KƐ.wav", "90.wav"],
+    1000100: ["1000000.wav", "1.wav", "KƐ.wav", "100.wav"],
+    
+    1000010: ["1000000.wav", "1.wav", "KƐ.wav", "10.wav"],
+    1000020: ["1000000.wav", "1.wav", "KƐ.wav", "20.wav"],
+    1000030: ["1000000.wav", "1.wav", "KƐ.wav", "30.wav"],
+    1000040: ["1000000.wav", "1.wav", "KƐ.wav", "40.wav"],
+    1000050: ["1000000.wav", "1.wav", "KƐ.wav", "50.wav"],
+    1000060: ["1000000.wav", "1.wav", "KƐ.wav", "60.wav"],
+    1000070: ["1000000.wav", "1.wav", "KƐ.wav", "70.wav"],
+    1000080: ["1000000.wav", "1.wav", "KƐ.wav", "80.wav"],
+    1000090: ["1000000.wav", "1.wav", "KƐ.wav", "90.wav"],
+    1000100: ["1000000.wav", "1.wav", "KƐ.wav", "100.wav"],
+
+    1000110: ["1000000.wav", "1.wav", "KƐ.wav", "110.wav"],
+    1000120: ["1000000.wav", "1.wav", "KƐ.wav", "120.wav"],
+    1000130: ["1000000.wav", "1.wav", "KƐ.wav", "130.wav"],
+    1000140: ["1000000.wav", "1.wav", "KƐ.wav", "140.wav"],
+    1000150: ["1000000.wav", "1.wav", "KƐ.wav", "150.wav"],
+    1000160: ["1000000.wav", "1.wav", "KƐ.wav", "160.wav"],
+    1000170: ["1000000.wav", "1.wav", "KƐ.wav", "170.wav"],
+    1000180: ["1000000.wav", "1.wav", "KƐ.wav", "180.wav"],
+    1000190: ["1000000.wav", "1.wav", "KƐ.wav", "190.wav"],
+    1000200: ["1000000.wav", "1.wav", "KƐ.wav", "200.wav"],
+
+    1000210: ["1000000.wav", "1.wav", "KƐ.wav", "210.wav"],
+    1000220: ["1000000.wav", "1.wav", "KƐ.wav", "220.wav"],
+    1000230: ["1000000.wav", "1.wav", "KƐ.wav", "230.wav"],
+    1000240: ["1000000.wav", "1.wav", "KƐ.wav", "240.wav"],
+    1000250: ["1000000.wav", "1.wav", "KƐ.wav", "250.wav"],
+    1000260: ["1000000.wav", "1.wav", "KƐ.wav", "260.wav"],
+    1000270: ["1000000.wav", "1.wav", "KƐ.wav", "270.wav"],
+    1000280: ["1000000.wav", "1.wav", "KƐ.wav", "280.wav"],
+    1000290: ["1000000.wav", "1.wav", "KƐ.wav", "290.wav"],
+    1000300: ["1000000.wav", "1.wav", "KƐ.wav", "300.wav"],
 }
+    
+# Load phoneme mappings
 def load_phoneme_mappings(audio_dir):
     phoneme_map = {}
     for filename in os.listdir(audio_dir):
@@ -1377,6 +1428,12 @@ def split_into_phonemes(text, phoneme_map):
             phonemes.append(phoneme_map[char])
     return phonemes
 
+# Function to play phonemes
+def play_phonemes(phonemes, phoneme_map, speed=1.0):
+    for phoneme in phonemes:
+        if phoneme in phoneme_map:
+            play_audio([phoneme_map[phoneme]], speed)
+
 # Function to process mixed input
 def process_mixed_input(text, speed=1.0):
     tokens = re.findall(r'\d+|\D+', text)
@@ -1398,11 +1455,8 @@ def tts():
     if not text:
         return jsonify({"error": "No text provided"}), 400
     
-    try:
-        process_mixed_input(text, speed)
-        return jsonify({"message": "Audio played successfully"})
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+    process_mixed_input(text, speed)
+    return jsonify({"message": "Audio played successfully"})
 
 if __name__ == '__main__':
     app.run(debug=False)
