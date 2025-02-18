@@ -1,26 +1,8 @@
-# Use an official Python runtime as a parent image
-FROM python:3.11-slim
+# Use the official Nginx image as the base image
+FROM nginx:latest
 
-# Set the working directory in the container
-WORKDIR /app
+# Copy the custom Nginx configuration file to the container
+COPY nginx.conf /etc/nginx/nginx.conf
 
-# Install system dependencies (PortAudio and ALSA for audio support)
-RUN apt-get update && apt-get install -y \
-    portaudio19-dev \
-    libasound2-dev \
-    && rm -rf /var/lib/apt/lists/*
-
-# Copy the requirements file into the container
-COPY requirements-docker.txt .
-
-# Install Python dependencies
-RUN pip install --no-cache-dir -r requirements-docker.txt
-
-# Copy the rest of the application code
-COPY . .
-
-# Make port 5000 available to the world outside this container
-EXPOSE 5000
-
-# Run the application using gunicorn
-CMD ["gunicorn", "--bind", "0.0.0.0:5000", "app:app"]
+# Expose port 80 for the web server
+EXPOSE 80
