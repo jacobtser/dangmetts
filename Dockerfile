@@ -1,8 +1,18 @@
-# Use the official Nginx image as the base image
-FROM nginx:latest
+# Use the official Python image as the base image
+FROM python:3.9-slim
 
-# Copy the custom Nginx configuration file to the container
-COPY nginx.conf /etc/nginx/nginx.conf
+# Set the working directory
+WORKDIR /app
 
-# Expose port 80 for the web server
-EXPOSE 80
+# Copy the requirements file and install dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy the application code
+COPY . .
+
+# Expose port 5000 for the app
+EXPOSE 5000
+
+# Run the application with Gunicorn
+CMD ["gunicorn", "app:app", "--bind", "0.0.0.0:5000"]

@@ -1,1 +1,1 @@
-gunicorn TTS_API.app:app
+web: gunicorn app:app
