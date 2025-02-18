@@ -8,7 +8,8 @@ import numpy as np
 app = Flask(__name__)
 
 # Define the directory containing the audio files
-audio_dir = os.path.join(os.path.dirname(__file__), "audio")
+audio_dir = os.getenv('AUDIO_DIR', os.path.join(os.path.dirname(__file__), "audio"))
+
 
 valid_word_file_map = {
         "a": "A.wav", "à": "A.wav",  # Same sound
