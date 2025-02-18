@@ -8,7 +8,7 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the application code
+# Copy the application code and audio files
 COPY . .
 
 # Expose port 5000 for the app
