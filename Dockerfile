@@ -23,10 +23,10 @@ COPY . .
 RUN mkdir -p /app/audio
 
 # Expose the port the app runs on
-EXPOSE 5000
+EXPOSE 10000
 
 # Define environment variable
 ENV AUDIO_DIR=/app/audio
 
 # Run the application
-CMD ["gunicorn", "app:app"]
+CMD ["gunicorn", "--bind", "0.0.0.0:10000", "app:app"]

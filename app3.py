@@ -1411,17 +1411,5 @@ def tts():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-# Command-line interface for user input
-def command_line_interface():
-    while True:
-        text = input("Enter a word or number to pronounce (or 'exit' to quit): ")
-        if text.lower() == 'exit':
-            break
-        process_mixed_input(text)
-
 if __name__ == '__main__':
-    # Uncomment the following line to run the command-line interface
-    # command_line_interface()
-    
-    # Run the Flask app
     app.run(host='0.0.0.0', port=10000, debug=False)
