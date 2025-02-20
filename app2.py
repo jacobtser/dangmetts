@@ -10,10 +10,6 @@ app = Flask(__name__)
 # Define the directory containing the audio files
 audio_dir = os.getenv('AUDIO_DIR', os.path.join(os.path.dirname(__file__), "audio"))
 
-# Root route to confirm the app is running
-@app.route('/')
-def home():
-    return "TTS Service is running!"
 
 valid_word_file_map = {
         "a": "A.wav", "à": "A.wav",  # Same sound
@@ -1341,7 +1337,6 @@ master_code = {
         4000000000002: ["1000000.wav", "MĨ.wav", "1000000.wav", "MĨ.wav", "1000000.wav", "4.wav", "KƐ.wav", "NYÃ.wav", "2.wav"],
     
 }
-
 def load_phoneme_mappings(audio_dir):
     phoneme_map = {}
     for filename in os.listdir(audio_dir):
@@ -1350,7 +1345,6 @@ def load_phoneme_mappings(audio_dir):
             phoneme_map[phoneme] = filename
     return phoneme_map
 
-# Load phoneme mappings
 valid_word_file_map = load_phoneme_mappings(audio_dir)
 
 # Function to play audio files
@@ -1393,7 +1387,7 @@ def process_mixed_input(text, speed=1.0):
             play_audio(audio_files, speed)
         else:
             phonemes = split_into_phonemes(token, valid_word_file_map)
-            play_audio(phonemes, speed)
+            play_phonemes(phonemes, valid_word_file_map, speed)
 
 # Flask route to handle user input
 @app.route('/tts', methods=['POST'])
@@ -1412,4 +1406,4 @@ def tts():
         return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=10000, debug=False)
+    app.run(debug=False)
