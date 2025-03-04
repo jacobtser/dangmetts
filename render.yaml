@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: tts-app
+    runtime: docker
+    port: 10000
+    env: docker
+    plan: free
+    buildCommand: ""  # No build command needed for Docker
+    startCommand: "python main.py"
+    envVars:
+      - key: AUDIO_DIR
+        value: /usr/src/app/audio_files
+    healthCheckPath: /  # Optional: Health check endpoint
+    autoDeploy: true  # Optional: Automatically deploy on Git push
