@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TTS App</title>
+</head>
+<body>
+    <h1>Text-to-Speech App</h1>
+    <form action="/tts" method="GET">
+        <label for="text">Enter text:</label><br>
+        <input type="text" id="text" name="text" placeholder="Type something..."><br><br>
+        <label for="speed">Speed (default: 1.0):</label><br>
+        <input type="number" id="speed" name="speed" step="0.1" min="0.5" max="2.0" value="1.0"><br><br>
+        <button type="submit">Generate Speech</button>
+    </form>
+
+    <h2>Instructions:</h2>
+    <ul>
+        <li>Enter text in the input box above.</li>
+        <li>Adjust the speed (optional).</li>
+        <li>Click "Generate Speech" to hear the output.</li>
+    </ul>
+</body>
+</html>
