@@ -1372,17 +1372,22 @@ def split_into_phonemes(text, phoneme_map):
 def concatenate_audio(files, speed=1.0):
     combined_audio = np.array([])
     sample_rate = None
+    valid_files_processed = 0
 
     for file in files:
         filepath = os.path.join(audio_dir, file)
         if os.path.exists(filepath):
+            print(f"Reading file: {filepath}")  # Debugging
             data, fs = sf.read(filepath)
             if sample_rate is None:
                 sample_rate = int(fs * speed)
             combined_audio = np.concatenate((combined_audio, data))
+            valid_files_processed += 1
         else:
-            print(f"Audio file not found: {file}")
+            print(f"Warning: Audio file not found: {file}")  # Debugging
 
+    if valid_files_processed == 0:
+        raise ValueError("No valid audio files found to process.")
     return combined_audio, sample_rate
 
 # Flask route to handle user input
@@ -1404,9 +1409,18 @@ def tts():
         audio_files = []
         for token in tokens:
             if token.isdigit():
-                audio_files.extend(generate_wav_sequence(int(token)))
+                sequence = generate_wav_sequence(int(token))
+                if not sequence:
+                    print(f"Warning: No audio files found for number: {token}")
+                audio_files.extend(sequence)
             else:
-                audio_files.extend(split_into_phonemes(token, valid_word_file_map))
+                phonemes = split_into_phonemes(token, valid_word_file_map)
+                if not phonemes:
+                    print(f"Warning: No audio files found for text: {token}")
+                audio_files.extend(phonemes)
+        
+        if not audio_files:
+            return jsonify({"error": "No valid audio files found for the input text"}), 400
         
         # Concatenate audio files
         combined_audio, sample_rate = concatenate_audio(audio_files, speed)

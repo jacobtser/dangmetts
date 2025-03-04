@@ -5,8 +5,8 @@ services:
     port: 10000
     env: docker
     plan: free
-    buildCommand: ""  # No build command needed for Docker
-    startCommand: "python main.py"
+    buildCommand: "docker build -t tts-app ."  # Build the Docker image
+    startCommand: "gunicorn --bind 0.0.0.0:10000 main:app"  # Start the app
     envVars:
       - key: AUDIO_DIR
         value: /usr/src/app/audio_files

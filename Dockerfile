@@ -12,13 +12,14 @@ WORKDIR /usr/src/app
 RUN python -m venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 
-# Copy the current directory contents into the container at /usr/src/app
-COPY . .
-
-# Install system dependencies for soundfile
+# Install system dependencies for soundfile and debugging tools
 RUN apt-get update && apt-get install -y \
     libsndfile1 \
+    curl \
     && rm -rf /var/lib/apt/lists/*
+
+# Copy the current directory contents into the container at /usr/src/app
+COPY . .
 
 # Install any needed packages specified in requirements.txt
 RUN pip install --no-cache-dir --upgrade pip && \
