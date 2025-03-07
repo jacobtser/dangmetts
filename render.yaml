@@ -8,4 +8,4 @@ services:
       - key: AUDIO_DIR
         value: ./audio_files
       - key: SECRET_KEY
-        value: '5f4dcc3b5aa765d61d8327deb882cf99b1cdf5b4e5f4dcc3b5aa765d61d8327d'  # Replace with a secure key
+        value:   # Replace with a secure key
