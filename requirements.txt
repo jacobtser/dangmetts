@@ -49,8 +49,7 @@ scipy==1.13.1
 sounddevice==0.5.1
 soundfile==0.12.1
 soxr==0.5.0.post1
-SQLAlchemy==2.0.38
-threadpoolctl==3.5.0
+flask-sqlalchemy==3.1.1  # or the latest versionthreadpoolctl==3.5.0
 tomli==2.2.1
 typing_extensions==4.12.2
 urllib3==2.2.3

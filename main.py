@@ -1559,6 +1559,13 @@ def concatenate_audio(files, speed=1.0):
         raise ValueError("No valid audio files found to process.")
     return combined_audio, sample_rate
 
+# Activity Logs route
+@app.route('/activity_logs')
+@login_required
+def activity_logs():
+    logs = ActivityLog.query.order_by(ActivityLog.timestamp.desc()).all()  # Fetch logs
+    return render_template('activity_logs.html', logs=logs)  # Pass logs to the template
+
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
