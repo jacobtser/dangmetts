@@ -14,7 +14,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 app = Flask(__name__)
-app.secret_key = os.getenv('5f4dcc3b5aa765d61d8327deb882cf99b1cdf5b4e5f4dcc3b5aa765d61d8327d')  # Load from environment variable
+app.secret_key = os.getenv('SECRET_KEY')  # Load from environment variable
 app.debug = True
 
 # Database configuration
@@ -1391,9 +1391,6 @@ master_code = {
         4000000000002: ["1000000.wav", "MĨ.wav", "1000000.wav", "MĨ.wav", "1000000.wav", "4.wav", "KƐ.wav", "NYÃ.wav", "2.wav"],
     
 }
-
-
-
 
 # Function to generate WAV sequence for numbers
 def generate_wav_sequence(number):
