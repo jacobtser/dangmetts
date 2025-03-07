@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TTS App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        label {
+            font-weight: bold;
+        }
+        input[type="text"], input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            margin: 8px 0;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #audio-player {
+            margin-top: 20px;
+        }
+        #error-message {
+            color: red;
+            margin-top: 10px;
+        }
+        .user-info {
+            margin-bottom: 20px;
+        }
+        .user-info a {
+            margin-right: 10px;
+            color: #4CAF50;
+            text-decoration: none;
+        }
+        .user-info a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <h1>Text-to-Speech App</h1>
+
+    <!-- User Info Section -->
+    <div class="user-info">
+        {% if current_user.is_authenticated %}
+            <p>Welcome, {{ current_user.username }}!</p>
+            <p>
+                <a href="{{ url_for('logout') }}">Logout</a> |
+                <a href="{{ url_for('activity_logs') }}">View Activity Logs</a>
+                <!-- Optional: Add this if you implemented CSV export -->
+                | <a href="{{ url_for('download_logs') }}">Download Logs as CSV</a>
+            </p>
+        {% else %}
+            <p><a href="{{ url_for('login') }}">Login</a> | <a href="{{ url_for('register') }}">Register</a></p>
+        {% endif %}
+    </div>
+
+    <!-- TTS Form -->
+    <form id="tts-form">
+        <label for="text">Enter text:</label><br>
+        <input type="text" id="text" name="text" placeholder="Type something..." required><br><br>
+        <label for="speed">Speed (default: 1.0):</label><br>
+        <input type="number" id="speed" name="speed" step="0.1" min="0.5" max="2.0" value="1.0"><br><br>
+        <button type="submit">Generate Speech</button>
+    </form>
+
+    <!-- Audio Player -->
+    <div id="audio-player" style="display: none;">
+        <h2>Generated Audio:</h2>
+        <audio controls>
+            Your browser does not support the audio element.
+        </audio>
+    </div>
+
+    <!-- Error Message -->
+    <div id="error-message" style="display: none;">
+        <p>Error: Could not generate audio. Please try again.</p>
+    </div>
+
+    <!-- Instructions -->
+    <h2>Instructions:</h2>
+    <ul>
+        <li>Enter text in the input box above.</li>
+        <li>Adjust the speed (optional).</li>
+        <li>Click "Generate Speech" to hear the output.</li>
+    </ul>
+
+    <!-- Script for TTS Form Submission -->
+    <script>
+        document.getElementById('tts-form').addEventListener('submit', async (e) => {
+            e.preventDefault(); // Prevent the form from submitting the traditional way
+
+            const text = document.getElementById('text').value;
+            const speed = document.getElementById('speed').value;
+
+            try {
+                const response = await fetch('/tts', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ text, speed }),
+                });
+
+                if (response.ok) {
+                    const blob = await response.blob();
+                    const audioUrl = URL.createObjectURL(blob);
+                    const audioPlayer = document.querySelector('#audio-player audio');
+                    audioPlayer.src = audioUrl;
+                    document.getElementById('audio-player').style.display = 'block';
+                    document.getElementById('error-message').style.display = 'none';
+                    audioPlayer.play();
+                } else {
+                    throw new Error('Failed to generate audio');
+                }
+            } catch (error) {
+                console.error(error);
+                document.getElementById('error-message').style.display = 'block';
+                document.getElementById('audio-player').style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
