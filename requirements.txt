@@ -38,12 +38,8 @@ pycparser==2.22
 pydub==0.25.1
 pyflakes==3.2.0
 PyLink==0.3.3
-pypiwin32==223
 pyserial==3.5
 python-dotenv==1.0.1
-pyttsx3==2.98
-pywin32==308
-requests==2.32.3
 scikit-learn==1.6.0
 scipy==1.13.1
 sounddevice==0.5.1
