@@ -1455,18 +1455,31 @@ def logout():
     logout_user()
     return redirect(url_for('home'))
 
-# Registration route
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
+        
+        print(f"Attempting to register user: {username}")  # Debugging
+        
+        # Check if the username already exists
+        existing_user = User.query.filter_by(username=username).first()
+        if existing_user:
+            print(f"Username '{username}' already exists.")  # Debugging
+            flash('Username already exists. Please choose a different username.', 'danger')
+            return redirect(url_for('register'))
+        
+        # Create and add the new user
         user = User(username=username)
         user.set_password(password)
         db.session.add(user)
         db.session.commit()
+        
+        print(f"User '{username}' registered successfully.")  # Debugging
         flash('Your account has been created! You are now able to log in', 'success')
         return redirect(url_for('login'))
+    
     return render_template('register.html')
 
 # Protect the home route
