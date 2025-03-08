@@ -64,8 +64,6 @@
             <p>
                 <a href="{{ url_for('logout') }}">Logout</a> |
                 <a href="{{ url_for('activity_logs') }}">View Activity Logs</a>
-                <!-- Optional: Add this if you implemented CSV export -->
-                | <a href="{{ url_for('download_logs') }}">Download Logs as CSV</a>
             </p>
         {% else %}
             <p><a href="{{ url_for('login') }}">Login</a> | <a href="{{ url_for('register') }}">Register</a></p>
