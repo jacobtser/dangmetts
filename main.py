@@ -9,9 +9,14 @@ import numpy as np
 from io import BytesIO
 from datetime import datetime
 from dotenv import load_dotenv
+import logging
 
 # Load environment variables from .env file
 load_dotenv()
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY')  # Load from environment variable
@@ -1479,7 +1484,6 @@ def register():
         print(f"User '{username}' registered successfully.")  # Debugging
         flash('Your account has been created! You are now able to log in', 'success')
         return redirect(url_for('login'))
-    
     return render_template('register.html')
 
 # Protect the home route
