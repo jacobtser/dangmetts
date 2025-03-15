@@ -697,7 +697,18 @@ number_to_wav = {
 
 # Master code dictionary for custom pronunciations
 master_code = {
-   1001: ["1000.wav", "1.wav", "KƐ.wav", "E.wav", "NYÃ.wav", "1.wav"],
+    101: ["100.wav", "1.wav", "KƐ.wav", "1.wav"],
+    102: ["100.wav", "1.wav", "KƐ.wav", "2.wav"],
+    103: ["100.wav", "1.wav", "KƐ.wav", "3.wav"],
+    104: ["100.wav", "1.wav", "KƐ.wav", "4.wav"],
+    105: ["100.wav", "1.wav", "KƐ.wav", "5.wav"],
+    106: ["100.wav", "1.wav", "KƐ.wav", "6.wav"],
+    107: ["100.wav", "1.wav", "KƐ.wav", "7.wav"],
+    108: ["100.wav", "1.wav", "KƐ.wav", "8.wav"],
+    109: ["100.wav", "1.wav", "KƐ.wav", "9.wav"],
+    110: ["100.wav", "1.wav", "KƐ.wav", "10.wav"],
+    
+    1001: ["1000.wav", "1.wav", "KƐ.wav", "E.wav", "NYÃ.wav", "1.wav"],
     1002: ["1000.wav", "1.wav", "KƐ.wav", "E.wav", "NYÃ.wav", "2.wav"],
     1003: ["1000.wav", "1.wav", "KƐ.wav", "E.wav", "NYÃ.wav", "3.wav"],
     1004: ["1000.wav", "1.wav", "KƐ.wav", "E.wav", "NYÃ.wav", "4.wav"],
