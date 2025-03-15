@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DÃNGME KÃNÉLƆ</title>
+    <style>
+        body {
+            font-family: 'Times New Roman', Times New Roman;
+            margin: 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: #fff;
+            padding: 20px;
+        }
+        h1 {
+            color: #fff;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        .user-info {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .user-info a {
+            margin-right: 10px;
+            color: #4CAF50;
+            text-decoration: none;
+        }
+        .user-info a:hover {
+            text-decoration: underline;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"], input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.8);
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            width: 100%;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #audio-player {
+            margin-top: 20px;
+            text-align: center;
+        }
+        #error-message {
+            color: red;
+            margin-top: 10px;
+            text-align: center;
+            display: none;
+        }
+        .instructions {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+        .vowels {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            text-align: center;
+        }
+        .developer-info {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #ccc;
+        }
+        .welcome-message {
+            text-align: center;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>DÃNGME KÃNÉLƆ</h1>
+
+        <!-- Welcoming Message -->
+        <div class="welcome-message">
+            {% if current_user.is_authenticated %}
+                <p>Mo hee yé nyɛ̃mĩ, {{ current_user.username }}! .</p>
+            {% else %}
+                <p>Mo hee ekohũ kɛ ba Dãngme klãmá nɛ́ tsɛ ɔ nɔ̃ nɛ́ o ngmãã.</p>
+            {% endif %}
+        </div>
+
+        <!-- Developer Info -->
+        <div class="developer-info">
+            <p>Developed by: Jacob Tser Doku | Phone: +233559499007 | Email: jtdoku1@st.knust.edu.gh / jacobtser20@gmail.com</p>
+        </div>
+
+        <!-- User Info Section -->
+        <div class="user-info">
+            {% if current_user.is_authenticated %}
+                <p>
+                    <a href="{{ url_for('logout') }}">Logout  (Jé kpo)</a> |
+                    <a href="{{ url_for('activity_logs') }}">View Activity Logs</a>
+                </p>
+            {% else %}
+                <p><a href="{{ url_for('login') }}">Login</a> | <a href="{{ url_for('register') }}">Register</a></p>
+            {% endif %}
+        </div>
+
+        <!-- TTS Form -->
+        <form id="tts-form">
+            <label for="text">Enter text:</label>
+            <input type="text" id="text" name="text" placeholder="Moo ngmã Dãngme nɔ̃ ko..." required>
+            <label for="speed">Speed (default: 1.0):</label>
+            <input type="number" id="speed" name="speed" step="0.1" min="0.5" max="2.0" value="1.0">
+            <button type="submit">Moo nyɛ̃ hí ɔ nɛ̃ mã kãne</button>
+        </form>
+
+        <!-- Audio Player -->
+        <div id="audio-player" style="display: none;">
+            <h2>Generated Audio (Wa to nɔ́ nɛ́ o mãã  bu tué ɔ he blɔnyã ngɛ́ híɔ):</h2>
+            <audio controls>
+                Your browser does not support the audio element.
+            </audio>
+        </div>
+
+        <!-- Error Message -->
+        <div id="error-message">
+            <p>Wa tui he blɔ nyã aloo pí Dãngme.</p>
+        </div>
+
+        <!-- Instructions -->
+        <div class="instructions">
+            <h2>Instructions (Blɔtsɔ̃ɔ̃mĩ):</h2>
+            <ul>
+                <li>Enter text in the input box above (Moo ngmã nɔ̃ ɔ̃ kɛ́ wo dákaa mĩ).</li>
+                <li>Adjust the speed (Moo tsɔ̃ɔ̃ esɔ mã ye kɛ́ tsɛ).</li>
+                <li>Click to hear the output (Moo nyɛ̃ dáka nɛ̃ a ngmã ké "Moo nyɛ̃ hí ɔ nɛ̃ mã kãne" nɛ̃ mã kãné...).</li>
+            </ul>
+        </div>
+
+        <!-- Dangme Vowels -->
+        <div class="vowels">
+            <h2>Dangme Vowels (Dãngme pɛli):</h2>
+            <p>Copy and use these vowels as needed (Ké o mãã hĩa Dãngme pɛli ɔ, mo wó ngɛ́ híɔ): à   á   ã   ã́   Á   Ã   Ã́   è   é   É   ɛ   ɛ̀   ɛ́   ɛ̃   Ɛ   Ɛ̀   Ɛ́   í   ĩ   Í   Ĩ   ò   ó   Ó   Ó   Ɔ̃   Ɔ̀   Ɔ́   ù   ú   ũ   Ù   Ú   Ũ </p>
+        </div>
+    </div>
+
+    <!-- Script for TTS Form Submission -->
+    <script>
+        document.getElementById('tts-form').addEventListener('submit', async (e) => {
+            e.preventDefault(); // Prevent the form from submitting the traditional way
+
+            const text = document.getElementById('text').value;
+            const speed = document.getElementById('speed').value;
+
+            try {
+                const response = await fetch('/tts', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ text, speed }),
+                });
+
+                if (response.ok) {
+                    const blob = await response.blob();
+                    const audioUrl = URL.createObjectURL(blob);
+                    const audioPlayer = document.querySelector('#audio-player audio');
+                    audioPlayer.src = audioUrl;
+                    document.getElementById('audio-player').style.display = 'block';
+                    document.getElementById('error-message').style.display = 'none';
+                    audioPlayer.play();
+                } else {
+                    throw new Error('Wa tui he blɔ nyã aloo pí Dãngme');
+                }
+            } catch (error) {
+                console.error(error);
+                document.getElementById('error-message').style.display = 'block';
+                document.getElementById('audio-player').style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
