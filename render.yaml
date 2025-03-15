@@ -3,10 +3,10 @@ services:
     name: tts-app
     runtime: python
     buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn theirs:app
+    startCommand: gunicorn ours:app
     envVars:
       - key: AUDIO_DIR
-        value: ./audio_files
+        value: audio_files
       - key: SECRET_KEY
         value: 17f1af3d3e65cc76ea3894bc844a713d185f19f6e55b50f49cf3ebc4e9c466d8  
       - key: IP_ADDRESS
