@@ -665,6 +665,7 @@ valid_word_file_map = {
     "nylù": "NYLU.wav",
     "nylú": "NYLÚ.wav",
     "nylũ": "NYLŨ.wav",   
+    "₵"   : "SÍDI.wav"
 }
 
 # Mapping of numbers to corresponding audio files
@@ -697,16 +698,16 @@ number_to_wav = {
 
 # Master code dictionary for custom pronunciations
 master_code = {
-    101: ["100.wav", "1.wav", "KƐ.wav", "E.wav", "NYÃ.wav", "1.wav"],
-    102: ["100.wav", "1.wav", "KƐ.wav", "E.wav", "NYÃ.wav", "2.wav"],
-    103: ["100.wav", "1.wav", "KƐ.wav", "E.wav", "NYÃ.wav", "3.wav"],
-    104: ["100.wav", "1.wav", "KƐ.wav", "E.wav", "NYÃ.wav", "4.wav"],
-    105: ["100.wav", "1.wav", "KƐ.wav", "E.wav", "NYÃ.wav", "5.wav"],
-    106: ["100.wav", "1.wav", "KƐ.wav", "E.wav", "NYÃ.wav", "6.wav"],
-    107: ["100.wav", "1.wav", "KƐ.wav", "E.wav", "NYÃ.wav", "7.wav"],
-    108: ["100.wav", "1.wav", "KƐ.wav", "E.wav", "NYÃ.wav", "8.wav"],
-    109: ["100.wav", "1.wav", "KƐ.wav", "E.wav", "NYÃ.wav", "9.wav"],
-    110: ["100.wav", "1.wav", "KƐ.wav", "E.wav", "NYÃ.wav", "10.wav"],
+    101: ["100.wav", "1.wav", "KƐ.wav", "1.wav"],
+    102: ["100.wav", "1.wav", "KƐ.wav", "2.wav"],
+    103: ["100.wav", "1.wav", "KƐ.wav", "3.wav"],
+    104: ["100.wav", "1.wav", "KƐ.wav", "4.wav"],
+    105: ["100.wav", "1.wav", "KƐ.wav", "5.wav"],
+    106: ["100.wav", "1.wav", "KƐ.wav", "6.wav"],
+    107: ["100.wav", "1.wav", "KƐ.wav", "7.wav"],
+    108: ["100.wav", "1.wav", "KƐ.wav", "8.wav"],
+    109: ["100.wav", "1.wav", "KƐ.wav", "9.wav"],
+    110: ["100.wav", "1.wav", "KƐ.wav", "10.wav"],
 
     # 1001 to 1010
     1001: ["1000.wav", "1.wav", "KƐ.wav", "E.wav", "NYÃ.wav", "1.wav"],
@@ -880,16 +881,16 @@ master_code = {
 #2ssssssss
 
 # 101 to 110
-        201: ["100.wav", "2.wav", "KƐ.wav", "NYÃ.wav", "1.wav"],
-        202: ["100.wav", "2.wav", "KƐ.wav", "NYÃ.wav", "2.wav"],
-        203: ["100.wav", "2.wav", "KƐ.wav", "NYÃ.wav", "3.wav"],
-        204: ["100.wav", "2.wav", "KƐ.wav", "NYÃ.wav", "4.wav"],
-        205: ["100.wav", "2.wav", "KƐ.wav", "NYÃ.wav", "5.wav"],
-        206: ["100.wav", "2.wav", "KƐ.wav", "NYÃ.wav", "6.wav"],
-        207: ["100.wav", "2.wav", "KƐ.wav", "NYÃ.wav", "7.wav"],
-        208: ["100.wav", "2.wav", "KƐ.wav", "NYÃ.wav", "8.wav"],
-        209: ["100.wav", "2.wav", "KƐ.wav", "NYÃ.wav", "9.wav"],
-        210: ["100.wav", "2.wav", "KƐ.wav", "NYÃ.wav", "10.wav"],
+        201: ["100.wav", "2.wav", "KƐ.wav", "1.wav"],
+        202: ["100.wav", "2.wav", "KƐ.wav", "2.wav"],
+        203: ["100.wav", "2.wav", "KƐ.wav", "3.wav"],
+        204: ["100.wav", "2.wav", "KƐ.wav", "4.wav"],
+        205: ["100.wav", "2.wav", "KƐ.wav", "5.wav"],
+        206: ["100.wav", "2.wav", "KƐ.wav", "6.wav"],
+        207: ["100.wav", "2.wav", "KƐ.wav", "7.wav"],
+        208: ["100.wav", "2.wav", "KƐ.wav", "8.wav"],
+        209: ["100.wav", "2.wav", "KƐ.wav", "9.wav"],
+        210: ["100.wav", "2.wav", "KƐ.wav", "10.wav"],
 
         # 1001 to 1010
         2001: ["1000.wav", "2.wav", "KƐ.wav", "NYÃ.wav", "1.wav"],
@@ -1049,16 +1050,16 @@ master_code = {
 
         #3ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss
         # 101 to 110
-        301: ["100.wav", "3.wav", "KƐ.wav", "NYÃ.wav", "1.wav"],
-        302: ["100.wav", "3.wav", "KƐ.wav", "NYÃ.wav", "2.wav"],
-        303: ["100.wav", "3.wav", "KƐ.wav", "NYÃ.wav", "3.wav"],
-        304: ["100.wav", "3.wav", "KƐ.wav", "NYÃ.wav", "4.wav"],
-        305: ["100.wav", "3.wav", "KƐ.wav", "NYÃ.wav", "5.wav"],
-        306: ["100.wav", "3.wav", "KƐ.wav", "NYÃ.wav", "6.wav"],
-        307: ["100.wav", "3.wav", "KƐ.wav", "NYÃ.wav", "7.wav"],
-        308: ["100.wav", "3.wav", "KƐ.wav", "NYÃ.wav", "8.wav"],
-        309: ["100.wav", "3.wav", "KƐ.wav", "NYÃ.wav", "9.wav"],
-        310: ["100.wav", "3.wav", "KƐ.wav", "NYÃ.wav", "10.wav"],
+        301: ["100.wav", "3.wav", "KƐ.wav",  "1.wav"],
+        302: ["100.wav", "3.wav", "KƐ.wav",  "2.wav"],
+        303: ["100.wav", "3.wav", "KƐ.wav",  "3.wav"],
+        304: ["100.wav", "3.wav", "KƐ.wav",  "4.wav"],
+        305: ["100.wav", "3.wav", "KƐ.wav",  "5.wav"],
+        306: ["100.wav", "3.wav", "KƐ.wav",  "6.wav"],
+        307: ["100.wav", "3.wav", "KƐ.wav",  "7.wav"],
+        308: ["100.wav", "3.wav", "KƐ.wav",  "8.wav"],
+        309: ["100.wav", "3.wav", "KƐ.wav",  "9.wav"],
+        310: ["100.wav", "3.wav", "KƐ.wav",  "10.wav"],
 
         # 1001 to 1010
         3001: ["1000.wav", "3.wav", "KƐ.wav", "NYÃ.wav", "1.wav"],
@@ -1218,16 +1219,16 @@ master_code = {
 
         #4ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss
         # 101 to 110
-        401: ["100.wav", "4.wav", "KƐ.wav", "NYÃ.wav", "1.wav"],
-        402: ["100.wav", "4.wav", "KƐ.wav", "NYÃ.wav", "2.wav"],
-        403: ["100.wav", "4.wav", "KƐ.wav", "NYÃ.wav", "3.wav"],
-        404: ["100.wav", "4.wav", "KƐ.wav", "NYÃ.wav", "4.wav"],
-        405: ["100.wav", "4.wav", "KƐ.wav", "NYÃ.wav", "5.wav"],
-        406: ["100.wav", "4.wav", "KƐ.wav", "NYÃ.wav", "6.wav"],
-        407: ["100.wav", "4.wav", "KƐ.wav", "NYÃ.wav", "7.wav"],
-        408: ["100.wav", "4.wav", "KƐ.wav", "NYÃ.wav", "8.wav"],
-        409: ["100.wav", "4.wav", "KƐ.wav", "NYÃ.wav", "9.wav"],
-        410: ["100.wav", "4.wav", "KƐ.wav", "NYÃ.wav", "10.wav"],
+        401: ["100.wav", "4.wav", "KƐ.wav",  "1.wav"],
+        402: ["100.wav", "4.wav", "KƐ.wav",  "2.wav"],
+        403: ["100.wav", "4.wav", "KƐ.wav",  "3.wav"],
+        404: ["100.wav", "4.wav", "KƐ.wav",  "4.wav"],
+        405: ["100.wav", "4.wav", "KƐ.wav",  "5.wav"],
+        406: ["100.wav", "4.wav", "KƐ.wav",  "6.wav"],
+        407: ["100.wav", "4.wav", "KƐ.wav",  "7.wav"],
+        408: ["100.wav", "4.wav", "KƐ.wav",  "8.wav"],
+        409: ["100.wav", "4.wav", "KƐ.wav",  "9.wav"],
+        410: ["100.wav", "4.wav", "KƐ.wav",  "10.wav"],
 
         # 1001 to 1010
         4001: ["1000.wav", "4.wav", "KƐ.wav", "NYÃ.wav", "1.wav"],
@@ -1568,8 +1569,8 @@ def concatenate_audio(files, speed=1.0):
                     data = data.astype(np.float32)
 
                 # Skip 6% of the audio at the beginning and end
-                start_index = int(0.04 * len(data))
-                end_index = len(data) - int(0.2 * len(data))
+                start_index = int(0.06 * len(data))
+                end_index = len(data) - int(0.15 * len(data))
                 data = data[start_index:end_index]
 
                 combined_audio = np.concatenate((combined_audio, data))
