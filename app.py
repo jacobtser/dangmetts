@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify, send_file, render_template, redirect,
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_migrate import Migrate  # Import Migrate
 import os
 import re
 import soundfile as sf
@@ -23,19 +24,23 @@ app.secret_key = os.getenv('SECRET_KEY')  # Load from environment variable
 app.debug = True
 
 # Database configuration
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URI', 'sqlite:///site.db')  # Use environment variable for DB URI
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
+
+# Initialize Flask-Migrate
+migrate = Migrate(app, db)  # Initialize Migrate
 
 # Flask-Login setup
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 
-# User model
+# User model with indexes for frequently queried fields
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(20), unique=True, nullable=False)
+    username = db.Column(db.String(20), unique=True, nullable=False, index=True)  # Added index
     password = db.Column(db.String(60), nullable=False)
+    is_admin = db.Column(db.Boolean, default=False)  # Added admin flag
 
     def set_password(self, password):
         self.password = generate_password_hash(password)
@@ -47,14 +52,16 @@ class User(UserMixin, db.Model):
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-# Activity Log model
+# Activity Log model with indexes for frequently queried fields
 class ActivityLog(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    username = db.Column(db.String(20), nullable=False)
-    ip_address = db.Column(db.String(15), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False, index=True)  # Added index
+    username = db.Column(db.String(20), nullable=False, index=True)  # Added index
+    ip_address = db.Column(db.String(15), nullable=False, index=True)  # Added index
     action = db.Column(db.String(100), nullable=False)
-    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow, index=True)  # Added index
+
+# Rest of your code...
 
 # Function to log user activity
 def log_activity(user_id, username, ip_address, action):
@@ -72,7 +79,7 @@ audio_dir = os.getenv('AUDIO_DIR', os.path.join(os.path.dirname(__file__), "audi
 
 # Mapping of words and phonemes to corresponding audio files
 valid_word_file_map = {
-    "a": "A.wav", "à": "A.wav",  
+   "a": "A.wav", "à": "A.wav",  
     "á": "Á.wav", "ã": "Ã.wav", 
 
     "e": "E.wav", "è": "E.wav",  
@@ -664,10 +671,10 @@ valid_word_file_map = {
     "nylu": "NYLU.wav",
     "nylù": "NYLU.wav",
     "nylú": "NYLÚ.wav",
-    "nylũ": "NYLŨ.wav",
-    "₵"   : "SÍDI.wav"
-    "."   : "NGMLÓBÍ.wav"
-    }
+    "nylũ": "NYLŨ.wav",   
+    "₵"   : "SÍDI.wav",
+    "."   : "NGMLÓBI.wav"
+}
 
 # Mapping of numbers to corresponding audio files
 number_to_wav = {
@@ -696,6 +703,7 @@ number_to_wav = {
     "KƐ": "KƐ.wav"
 }
 
+
 # Master code dictionary for custom pronunciations
 master_code = {
     101: ["100.wav", "1.wav", "KƐ.wav", "1.wav"],
@@ -708,7 +716,8 @@ master_code = {
     108: ["100.wav", "1.wav", "KƐ.wav", "8.wav"],
     109: ["100.wav", "1.wav", "KƐ.wav", "9.wav"],
     110: ["100.wav", "1.wav", "KƐ.wav", "10.wav"],
-    
+
+    # 1001 to 1010
     1001: ["1000.wav", "1.wav", "KƐ.wav", "E.wav", "NYÃ.wav", "1.wav"],
     1002: ["1000.wav", "1.wav", "KƐ.wav", "E.wav", "NYÃ.wav", "2.wav"],
     1003: ["1000.wav", "1.wav", "KƐ.wav", "E.wav", "NYÃ.wav", "3.wav"],
@@ -880,16 +889,16 @@ master_code = {
 #2ssssssss
 
 # 101 to 110
-        201: ["100.wav", "2.wav", "KƐ.wav", "NYÃ.wav", "1.wav"],
-        202: ["100.wav", "2.wav", "KƐ.wav", "NYÃ.wav", "2.wav"],
-        203: ["100.wav", "2.wav", "KƐ.wav", "NYÃ.wav", "3.wav"],
-        204: ["100.wav", "2.wav", "KƐ.wav", "NYÃ.wav", "4.wav"],
-        205: ["100.wav", "2.wav", "KƐ.wav", "NYÃ.wav", "5.wav"],
-        206: ["100.wav", "2.wav", "KƐ.wav", "NYÃ.wav", "6.wav"],
-        207: ["100.wav", "2.wav", "KƐ.wav", "NYÃ.wav", "7.wav"],
-        208: ["100.wav", "2.wav", "KƐ.wav", "NYÃ.wav", "8.wav"],
-        209: ["100.wav", "2.wav", "KƐ.wav", "NYÃ.wav", "9.wav"],
-        210: ["100.wav", "2.wav", "KƐ.wav", "NYÃ.wav", "10.wav"],
+        201: ["100.wav", "2.wav", "KƐ.wav", "1.wav"],
+        202: ["100.wav", "2.wav", "KƐ.wav", "2.wav"],
+        203: ["100.wav", "2.wav", "KƐ.wav", "3.wav"],
+        204: ["100.wav", "2.wav", "KƐ.wav", "4.wav"],
+        205: ["100.wav", "2.wav", "KƐ.wav", "5.wav"],
+        206: ["100.wav", "2.wav", "KƐ.wav", "6.wav"],
+        207: ["100.wav", "2.wav", "KƐ.wav", "7.wav"],
+        208: ["100.wav", "2.wav", "KƐ.wav", "8.wav"],
+        209: ["100.wav", "2.wav", "KƐ.wav", "9.wav"],
+        210: ["100.wav", "2.wav", "KƐ.wav", "10.wav"],
 
         # 1001 to 1010
         2001: ["1000.wav", "2.wav", "KƐ.wav", "NYÃ.wav", "1.wav"],
@@ -1049,16 +1058,16 @@ master_code = {
 
         #3ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss
         # 101 to 110
-        301: ["100.wav", "3.wav", "KƐ.wav", "NYÃ.wav", "1.wav"],
-        302: ["100.wav", "3.wav", "KƐ.wav", "NYÃ.wav", "2.wav"],
-        303: ["100.wav", "3.wav", "KƐ.wav", "NYÃ.wav", "3.wav"],
-        304: ["100.wav", "3.wav", "KƐ.wav", "NYÃ.wav", "4.wav"],
-        305: ["100.wav", "3.wav", "KƐ.wav", "NYÃ.wav", "5.wav"],
-        306: ["100.wav", "3.wav", "KƐ.wav", "NYÃ.wav", "6.wav"],
-        307: ["100.wav", "3.wav", "KƐ.wav", "NYÃ.wav", "7.wav"],
-        308: ["100.wav", "3.wav", "KƐ.wav", "NYÃ.wav", "8.wav"],
-        309: ["100.wav", "3.wav", "KƐ.wav", "NYÃ.wav", "9.wav"],
-        310: ["100.wav", "3.wav", "KƐ.wav", "NYÃ.wav", "10.wav"],
+        301: ["100.wav", "3.wav", "KƐ.wav",  "1.wav"],
+        302: ["100.wav", "3.wav", "KƐ.wav",  "2.wav"],
+        303: ["100.wav", "3.wav", "KƐ.wav",  "3.wav"],
+        304: ["100.wav", "3.wav", "KƐ.wav",  "4.wav"],
+        305: ["100.wav", "3.wav", "KƐ.wav",  "5.wav"],
+        306: ["100.wav", "3.wav", "KƐ.wav",  "6.wav"],
+        307: ["100.wav", "3.wav", "KƐ.wav",  "7.wav"],
+        308: ["100.wav", "3.wav", "KƐ.wav",  "8.wav"],
+        309: ["100.wav", "3.wav", "KƐ.wav",  "9.wav"],
+        310: ["100.wav", "3.wav", "KƐ.wav",  "10.wav"],
 
         # 1001 to 1010
         3001: ["1000.wav", "3.wav", "KƐ.wav", "NYÃ.wav", "1.wav"],
@@ -1218,16 +1227,16 @@ master_code = {
 
         #4ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss
         # 101 to 110
-        401: ["100.wav", "4.wav", "KƐ.wav", "NYÃ.wav", "1.wav"],
-        402: ["100.wav", "4.wav", "KƐ.wav", "NYÃ.wav", "2.wav"],
-        403: ["100.wav", "4.wav", "KƐ.wav", "NYÃ.wav", "3.wav"],
-        404: ["100.wav", "4.wav", "KƐ.wav", "NYÃ.wav", "4.wav"],
-        405: ["100.wav", "4.wav", "KƐ.wav", "NYÃ.wav", "5.wav"],
-        406: ["100.wav", "4.wav", "KƐ.wav", "NYÃ.wav", "6.wav"],
-        407: ["100.wav", "4.wav", "KƐ.wav", "NYÃ.wav", "7.wav"],
-        408: ["100.wav", "4.wav", "KƐ.wav", "NYÃ.wav", "8.wav"],
-        409: ["100.wav", "4.wav", "KƐ.wav", "NYÃ.wav", "9.wav"],
-        410: ["100.wav", "4.wav", "KƐ.wav", "NYÃ.wav", "10.wav"],
+        401: ["100.wav", "4.wav", "KƐ.wav",  "1.wav"],
+        402: ["100.wav", "4.wav", "KƐ.wav",  "2.wav"],
+        403: ["100.wav", "4.wav", "KƐ.wav",  "3.wav"],
+        404: ["100.wav", "4.wav", "KƐ.wav",  "4.wav"],
+        405: ["100.wav", "4.wav", "KƐ.wav",  "5.wav"],
+        406: ["100.wav", "4.wav", "KƐ.wav",  "6.wav"],
+        407: ["100.wav", "4.wav", "KƐ.wav",  "7.wav"],
+        408: ["100.wav", "4.wav", "KƐ.wav",  "8.wav"],
+        409: ["100.wav", "4.wav", "KƐ.wav",  "9.wav"],
+        410: ["100.wav", "4.wav", "KƐ.wav",  "10.wav"],
 
         # 1001 to 1010
         4001: ["1000.wav", "4.wav", "KƐ.wav", "NYÃ.wav", "1.wav"],
@@ -1340,10 +1349,9 @@ master_code = {
         # 1,000,000,000,001 to 1,000,000,000,010
         4000000000001: ["1000000.wav", "MĨ.wav", "1000000.wav", "MĨ.wav", "1000000.wav", "4.wav", "KƐ.wav", "NYÃ.wav", "1.wav"],
         4000000000002: ["1000000.wav", "MĨ.wav", "1000000.wav", "MĨ.wav", "1000000.wav", "4.wav", "KƐ.wav", "NYÃ.wav", "2.wav"],
-}
+        }
 
-
-# Function to generate the correct sequence of .wav files for a number
+        # Updated function to generate the correct sequence of .wav files for a number
 def generate_wav_sequence(number):
     if number in master_code:
         return master_code[number]
@@ -1629,10 +1637,16 @@ def concatenate_audio(files, speed=1.0):
         raise ValueError("No valid audio files found to process.")
     return combined_audio, sample_rate
 
+
 # Serve static audio files
 @app.route('/audio_files/<filename>')
 def serve_audio(filename):
     return send_from_directory(audio_dir, filename)
+
+# Home route
+@app.route('/')
+def home():
+    return render_template('index.html')  # Render the index.html template
 
 # Login route
 @app.route('/login', methods=['GET', 'POST'])
@@ -1644,7 +1658,7 @@ def login():
         if user and user.check_password(password):
             login_user(user)
             log_activity(user.id, user.username, request.remote_addr, "Logged in")
-            return redirect(url_for('app'))
+            return redirect(url_for('app_route'))  # Redirect to app_route
         else:
             flash('Login Unsuccessful. Please check username and password', 'danger')
     return render_template('login.html')
@@ -1672,7 +1686,7 @@ def register():
         db.session.commit()
         log_activity(user.id, user.username, request.remote_addr, "Registered")
         flash('Your account has been created! You are now able to log in', 'success')
-        return redirect(url_for('login'))  # Redirect to login page after registration
+        return redirect(url_for('login'))
     return render_template('register.html')
 
 # Main app route
@@ -1720,8 +1734,15 @@ def tts():
 @app.route('/activity_logs')
 @login_required
 def activity_logs():
-    if request.remote_addr != "my_ip_address":  # Replace with your IP address
+    # Log the access attempt (for auditing)
+    client_ip = request.headers.get('X-Forwarded-For', request.remote_addr)
+    logger.info(f"Access attempt to activity logs by user: {current_user.username}, IP: {client_ip}")
+
+    # Check if the current user is an admin
+    if not current_user.is_admin:  # Assuming you have an `is_admin` field in your User model
         return "Access denied", 403
+
+    # Fetch and display logs
     logs = ActivityLog.query.order_by(ActivityLog.timestamp.desc()).all()
     return render_template('activity_logs.html', logs=logs)
 
