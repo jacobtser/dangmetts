@@ -1623,7 +1623,7 @@ def concatenate_audio(files, speed=1.0):
 
                 # Skip 6% of the audio at the beginning and end
                 start_index = int(0.08 * len(data))
-                end_index = len(data) - int(0.3 * len(data))
+                end_index = len(data) - int(0.2 * len(data))
                 data = data[start_index:end_index]
 
                 combined_audio = np.concatenate((combined_audio, data))
