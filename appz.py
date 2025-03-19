@@ -1739,7 +1739,7 @@ def activity_logs():
     logger.info(f"Access attempt to activity logs by user: {current_user.username}, IP: {client_ip}")
 
     # Check if the current user is an admin
-    if not current_user.is_admin:  # Assuming you have an `is_admin` field in your User model
+    if not current_user.is_admin:  # Assuming having an `is_admin` field in your User model
         return "Access denied", 403
 
     # Fetch and display logs
