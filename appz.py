@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify, send_file, render_template, redirect,
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_migrate import Migrate
+from flask_migrate import Migrate  # Import Migrate
 import os
 import re
 import soundfile as sf
@@ -21,25 +21,26 @@ logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY')  # Load from environment variable
+app.debug = True
 
 # Database configuration
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URI')  # Use environment variable for DB URI
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URI', 'sqlite:///site.db')  # Use environment variable for DB URI
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 # Initialize Flask-Migrate
-migrate = Migrate(app, db)
+migrate = Migrate(app, db)  # Initialize Migrate
 
 # Flask-Login setup
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 
-# User model
+# User model with indexes for frequently queried fields
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(20), unique=True, nullable=False, index=True)
+    username = db.Column(db.String(20), unique=True, nullable=False, index=True)  # Added index
     password = db.Column(db.String(60), nullable=False)
-    is_admin = db.Column(db.Boolean, default=False)
+    is_admin = db.Column(db.Boolean, default=False)  # Added admin flag
 
     def set_password(self, password):
         self.password = generate_password_hash(password)
@@ -51,14 +52,16 @@ class User(UserMixin, db.Model):
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-# Activity Log model
+# Activity Log model with indexes for frequently queried fields
 class ActivityLog(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False, index=True)
-    username = db.Column(db.String(20), nullable=False, index=True)
-    ip_address = db.Column(db.String(15), nullable=False, index=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False, index=True)  # Added index
+    username = db.Column(db.String(20), nullable=False, index=True)  # Added index
+    ip_address = db.Column(db.String(15), nullable=False, index=True)  # Added index
     action = db.Column(db.String(100), nullable=False)
-    timestamp = db.Column(db.DateTime, default=datetime.utcnow, index=True)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow, index=True)  # Added index
+
+# Rest of your code...
 
 # Function to log user activity
 def log_activity(user_id, username, ip_address, action):
@@ -76,7 +79,7 @@ audio_dir = os.getenv('AUDIO_DIR', os.path.join(os.path.dirname(__file__), "audi
 
 # Mapping of words and phonemes to corresponding audio files
 valid_word_file_map = {
-     "a": "A.wav", "à": "A.wav",  
+   "a": "A.wav", "à": "A.wav",  
     "á": "Á.wav", "ã": "Ã.wav", 
 
     "e": "E.wav", "è": "E.wav",  
@@ -699,6 +702,7 @@ number_to_wav = {
     1000000: "1000000.wav",
     "KƐ": "KƐ.wav"
 }
+
 
 # Master code dictionary for custom pronunciations
 master_code = {
@@ -1345,39 +1349,9 @@ master_code = {
         # 1,000,000,000,001 to 1,000,000,000,010
         4000000000001: ["1000000.wav", "MĨ.wav", "1000000.wav", "MĨ.wav", "1000000.wav", "4.wav", "KƐ.wav", "NYÃ.wav", "1.wav"],
         4000000000002: ["1000000.wav", "MĨ.wav", "1000000.wav", "MĨ.wav", "1000000.wav", "4.wav", "KƐ.wav", "NYÃ.wav", "2.wav"],
-}
-
-# Function to generate the correct sequence of .wav files for a number
-def generate_wav_sequence(number):
-    if number in master_code:
-        return master_code[number]
-    elif number < 1:
-        return []
-    else:
-        base_wavs = {
-            1: "1.wav",
-            2: "2.wav",
-            3: "3.wav",
-            4: "4.wav",
-            5: "5.wav",
-            6: "6.wav",
-            7: "7.wav",
-            8: "8.wav",
-            9: "9.wav",
-            10: "10.wav",
-            20: "20-90.wav",
-            30: "20-90.wav",
-            40: "20-90.wav",
-            50: "20-90.wav",
-            60: "20-90.wav",
-            70: "20-90.wav",
-            80: "20-90.wav",
-            90: "20-90.wav",
-            100: "100.wav",
-            1000: "1000.wav",
-            1000000: "1000000.wav"
         }
-         # Updated function to generate the correct sequence of .wav files for a number
+
+        # Updated function to generate the correct sequence of .wav files for a number
 def generate_wav_sequence(number):
     if number in master_code:
         return master_code[number]
@@ -1663,6 +1637,7 @@ def concatenate_audio(files, speed=1.0):
         raise ValueError("No valid audio files found to process.")
     return combined_audio, sample_rate
 
+
 # Serve static audio files
 @app.route('/audio_files/<filename>')
 def serve_audio(filename):
@@ -1671,7 +1646,7 @@ def serve_audio(filename):
 # Home route
 @app.route('/')
 def home():
-    return render_template('index.html')
+    return render_template('index.html')  # Render the index.html template
 
 # Login route
 @app.route('/login', methods=['GET', 'POST'])
@@ -1683,7 +1658,7 @@ def login():
         if user and user.check_password(password):
             login_user(user)
             log_activity(user.id, user.username, request.remote_addr, "Logged in")
-            return redirect(url_for('app_route'))
+            return redirect(url_for('app_route'))  # Redirect to app_route
         else:
             flash('Login Unsuccessful. Please check username and password', 'danger')
     return render_template('login.html')
@@ -1759,16 +1734,19 @@ def tts():
 @app.route('/activity_logs')
 @login_required
 def activity_logs():
+    # Log the access attempt (for auditing)
     client_ip = request.headers.get('X-Forwarded-For', request.remote_addr)
     logger.info(f"Access attempt to activity logs by user: {current_user.username}, IP: {client_ip}")
 
-    if not current_user.is_admin:
+    # Check if the current user is an admin
+    if not current_user.is_admin:  # Assuming you have an `is_admin` field in your User model
         return "Access denied", 403
 
+    # Fetch and display logs
     logs = ActivityLog.query.order_by(ActivityLog.timestamp.desc()).all()
     return render_template('activity_logs.html', logs=logs)
 
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
-    app.run(host='0.0.0.0', port=10000)
+    app.run(host='0.0.0.0', port=10000, debug=True)
