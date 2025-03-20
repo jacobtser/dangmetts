@@ -3,7 +3,7 @@ services:
     name: tts-api
     runtime: python
     buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn app:app
+    startCommand: gunicorn 11:app
     envVars:
       - key: SECRET_KEY
         value: 17f1af3d3e65cc76ea3894bc844a713d185f19f6e55b50f49cf3ebc4e9c466d8
