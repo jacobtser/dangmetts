@@ -1,8 +1,9 @@
-from flask import Flask, request, jsonify, send_file, render_template, redirect, url_for, flash, send_from_directory
+from flask import Flask, request, jsonify, send_from_directory, render_template, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_migrate import Migrate
+from gtts import gTTS
 import os
 import re
 import soundfile as sf
@@ -71,10 +72,12 @@ def log_activity(user_id, username, ip_address, action):
     db.session.add(log)
     db.session.commit()
 
-# Define the directory containing the audio files
-audio_dir = os.getenv('AUDIO_DIR', os.path.join(os.path.dirname(__file__), "audio_files"))
+# Directory for audio files
+AUDIO_DIR = os.path.join(os.path.dirname(__file__), 'audio_files')
+if not os.path.exists(AUDIO_DIR):
+    os.makedirs(AUDIO_DIR)
 
-# Mapping of words and phonemes to corresponding audio files
+
 valid_word_file_map = {
      "a": "A.wav", "à": "A.wav",  
     "á": "Á.wav", "ã": "Ã.wav", 
@@ -1663,11 +1666,6 @@ def concatenate_audio(files, speed=1.0):
         raise ValueError("No valid audio files found to process.")
     return combined_audio, sample_rate
 
-# Serve static audio files
-@app.route('/audio_files/<filename>')
-def serve_audio(filename):
-    return send_from_directory(audio_dir, filename)
-
 # Home route
 @app.route('/')
 def home():
@@ -1721,39 +1719,29 @@ def app_route():
     return render_template('app.html')
 
 # TTS route to handle user input
-@app.route('/tts', methods=['POST'])
+@app.route('/pronounce', methods=['POST'])
 @login_required
-def tts():
-    data = request.json
-    text = data.get('text')
-    speed = data.get('speed', 1.0)
-    
+def pronounce():
+    text = request.form.get('text')
     if not text:
         return jsonify({"error": "No text provided"}), 400
-    
-    try:
-        tokens = re.findall(r'\d+|\D+', text)
-        audio_files = []
-        for token in tokens:
-            if token.isdigit():
-                sequence = generate_wav_sequence(int(token))
-                audio_files.extend(sequence)
-            else:
-                phonemes = split_into_phonemes(token, valid_word_file_map)
-                audio_files.extend(phonemes)
 
-        if not audio_files:
-            return jsonify({"error": "No valid audio files found for the input text"}), 400
+    # Generate a unique filename for the audio
+    filename = f"output_{hash(text)}.wav"
+    filepath = os.path.join(AUDIO_DIR, filename)
 
-        combined_audio, sample_rate = concatenate_audio(audio_files, speed)
-        audio_buffer = BytesIO()
-        sf.write(audio_buffer, combined_audio, sample_rate, format='WAV')
-        audio_buffer.seek(0)
-        
-        return send_file(audio_buffer, mimetype='audio/wav')
-    
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+    # Generate audio using gTTS
+    tts = gTTS(text=text, lang='en')
+    tts.save(filepath)
+
+    # Return the URL to the generated audio file
+    audio_url = url_for('serve_audio', filename=filename, _external=True)
+    return jsonify({"audio_url": audio_url})
+
+# Serve audio files
+@app.route('/audio_files/<filename>')
+def serve_audio(filename):
+    return send_from_directory(AUDIO_DIR, filename)
 
 # Activity Logs route
 @app.route('/activity_logs')
