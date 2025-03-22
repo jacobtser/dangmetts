@@ -24,8 +24,7 @@ app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY')  # Load from environment variable
 
 # Database configuration
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URI','postgresql://dangme_tts_user:lXw3MXTb9rDNpH5twofWWevQnVFOU47d@dpg-cvcom3rtq21c73a1po10-a.frankfurt-postgres.render.com/dangme_tts'
- )  # Use environment variable for DB URI
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URI', 'sqlite:///app.db')  # Fallback to SQLite if DATABASE_URI is not set
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
@@ -74,11 +73,13 @@ def log_activity(user_id, username, ip_address, action):
     db.session.commit()
 
 # Directory for audio files
-AUDIO_DIR = os.path.join(os.path.dirname(__file__), 'audio_files')
+AUDIO_DIR = "/path/to/your/audio_files"  # Update this path to your audio files directory
 if not os.path.exists(AUDIO_DIR):
     os.makedirs(AUDIO_DIR)
+    logger.info(f"Created audio directory: {AUDIO_DIR}")
 
 
+# Mapping of words/phonemes to corresponding audio files
 valid_word_file_map = {
      "a": "A.wav", "à": "A.wav",  
     "á": "Á.wav", "ã": "Ã.wav", 
@@ -1698,22 +1699,40 @@ def pronounce():
     if not text:
         return jsonify({"error": "No text provided"}), 400
 
-    # Generate a unique filename for the audio
+    logger.info(f"Received text: {text}")
+
+    phonemes = split_into_phonemes(text, valid_word_file_map)
+    logger.info(f"Phonemes: {phonemes}")
+
     filename = f"output_{hash(text)}.wav"
     filepath = os.path.join(AUDIO_DIR, filename)
 
-    # Generate audio using gTTS
-    tts = gTTS(text=text, lang='en')
-    tts.save(filepath)
+    try:
+        combined_audio, sample_rate = concatenate_audio(phonemes)
+        sf.write(filepath, combined_audio, sample_rate)
+        logger.info(f"Audio file saved at: {filepath}")
 
-    # Return the URL to the generated audio file
-    audio_url = url_for('serve_audio', filename=filename, _external=True)
-    return jsonify({"audio_url": audio_url})
+        if os.path.exists(filepath):
+            logger.info("Audio file exists.")
+        else:
+            logger.error("Audio file was not created.")
+            return jsonify({"error": "Failed to generate audio file"}), 500
+
+        audio_url = url_for('serve_audio', filename=filename, _external=True)
+        logger.info(f"Audio URL: {audio_url}")
+        return jsonify({"audio_url": audio_url})
+    except Exception as e:
+        logger.error(f"Error generating audio: {e}")
+        return jsonify({"error": "Failed to generate audio"}), 500
 
 # Serve audio files
 @app.route('/audio_files/<filename>')
 def serve_audio(filename):
-    return send_from_directory(AUDIO_DIR, filename)
+    try:
+        return send_from_directory(AUDIO_DIR, filename)
+    except FileNotFoundError:
+        logger.error(f"Audio file not found: {filename}")
+        return jsonify({"error": "Audio file not found"}), 404
 
 # Activity Logs route
 @app.route('/activity_logs')
@@ -1730,5 +1749,5 @@ def activity_logs():
 
 if __name__ == '__main__':
     with app.app_context():
-        db.create_all()
-    app.run(host='0.0.0.0', port=10000)
+        db.create_all()  # Create database tables if they don't exist
+    app.run(host='0.0.0.0', port=10000, debug=True)

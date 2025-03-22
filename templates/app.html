@@ -1,18 +1,46 @@
-{% extends "base.html" %}
-
-{% block title %}DÃNGME KÃNÉLƆ{% endblock %}
-
-{% block content %}
-    <h1>TTS App</h1>
-    <form id="tts-form">
-        <label for="text-input">Enter text:</label>
-        <textarea id="text-input" name="text" rows="4" required></textarea>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pronunciation App</title>
+</head>
+<body>
+    <h1>Enter Text to Pronounce</h1>
+    <form id="pronounce-form">
+        <input type="text" id="text-input" name="text" placeholder="Enter text..." required>
         <button type="submit">Pronounce</button>
     </form>
-    <div class="audio-player">
-        <audio id="audio-player" controls>
-            <source id="audio-source" src="" type="audio/wav">
-            Your browser does not support the audio element.
-        </audio>
-    </div>
-{% endblock %}
+    <audio id="audio-player" controls style="display: none;"></audio>
+
+    <script>
+        document.getElementById('pronounce-form').addEventListener('submit', function (e) {
+            e.preventDefault();  // Prevent form submission
+            const text = document.getElementById('text-input').value;
+
+            fetch('/pronounce', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `text=${encodeURIComponent(text)}`,
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.audio_url) {
+                    const audioPlayer = document.getElementById('audio-player');
+                    audioPlayer.src = data.audio_url;
+                    audioPlayer.style.display = 'block';
+                    audioPlayer.play();
+                } else {
+                    alert('Error generating audio.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while generating audio.');
+            });
+        });
+    </script>
+</body>
+</html>
