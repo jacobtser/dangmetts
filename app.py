@@ -24,7 +24,8 @@ app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY')  # Load from environment variable
 
 # Database configuration
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URI')  # Use environment variable for DB URI
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URI','postgresql://dangme_tts_user:lXw3MXTb9rDNpH5twofWWevQnVFOU47d@dpg-cvcom3rtq21c73a1po10-a.frankfurt-postgres.render.com/dangme_tts'
+ )  # Use environment variable for DB URI
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
