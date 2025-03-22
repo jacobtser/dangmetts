@@ -50,7 +50,7 @@ class User(UserMixin, db.Model):
 
 @login_manager.user_loader
 def load_user(user_id):
-    return User.query.get(int(user_id))
+    return db.session.get(User, int(user_id))  # Use db.session.get() instead of User.query.get()
 
 # Activity Log model
 class ActivityLog(db.Model):
@@ -73,11 +73,10 @@ def log_activity(user_id, username, ip_address, action):
     db.session.commit()
 
 # Directory for audio files
-AUDIO_DIR = "/path/to/your/audio_files"  # Update this path to your audio files directory
+AUDIO_DIR = os.path.join(os.path.dirname(__file__), 'audio_files')  # Update this path to your audio files directory
 if not os.path.exists(AUDIO_DIR):
     os.makedirs(AUDIO_DIR)
     logger.info(f"Created audio directory: {AUDIO_DIR}")
-
 
 # Mapping of words/phonemes to corresponding audio files
 valid_word_file_map = {
