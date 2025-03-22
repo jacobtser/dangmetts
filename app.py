@@ -1350,36 +1350,7 @@ master_code = {
         4000000000002: ["1000000.wav", "MĨ.wav", "1000000.wav", "MĨ.wav", "1000000.wav", "4.wav", "KƐ.wav", "NYÃ.wav", "2.wav"],
 }
 
-# Function to generate the correct sequence of .wav files for a number
-def generate_wav_sequence(number):
-    if number in master_code:
-        return master_code[number]
-    elif number < 1:
-        return []
-    else:
-        base_wavs = {
-            1: "1.wav",
-            2: "2.wav",
-            3: "3.wav",
-            4: "4.wav",
-            5: "5.wav",
-            6: "6.wav",
-            7: "7.wav",
-            8: "8.wav",
-            9: "9.wav",
-            10: "10.wav",
-            20: "20-90.wav",
-            30: "20-90.wav",
-            40: "20-90.wav",
-            50: "20-90.wav",
-            60: "20-90.wav",
-            70: "20-90.wav",
-            80: "20-90.wav",
-            90: "20-90.wav",
-            100: "100.wav",
-            1000: "1000.wav",
-            1000000: "1000000.wav"
-        }
+
          # Updated function to generate the correct sequence of .wav files for a number
 def generate_wav_sequence(number):
     if number in master_code:
